@@ -1,0 +1,26 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+{% extends 'page.html.twig' %}
+
+{% block content %}
+
+	<p>Welcome!</p>
+
+	<ul>
+		{%  for event in events %}
+			<li>
+				<div class="">{{  event.title }}</div>
+				<div class="">{{  event.start | date("F jS \\a\\t g:ia") }}</div>
+				<div class="">{{  event.end | date("F jS \\a\\t g:ia") }}</div>
+				<div class=""><a href="event/{{  event.slug }}/">More</a></div>
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}

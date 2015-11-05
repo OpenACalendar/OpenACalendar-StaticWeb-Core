@@ -1,0 +1,38 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
+		<title>{{  config.title }}</title>
+		{% block htmlHeader %}{% endblock %}
+	</head>
+	<body>
+		<div id="pageWrapper">
+			<div id="page">
+				<div id="headerWrapper">
+					<div id="header">
+						{%  include 'header.html.twig' %}
+					</div>
+				</div>
+				<div id="bodyWrapper">
+					<div id="body">
+						{% block content %}{% endblock %}
+					</div>
+				</div>
+				<div id="footerWrapper">
+					<div id="footer">
+						{%  include 'footer.html.twig' %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
