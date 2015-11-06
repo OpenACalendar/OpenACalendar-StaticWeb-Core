@@ -173,8 +173,13 @@ class Site {
 		))));
 
 		foreach($this->groups as $group) {
+			$groupFilter = new EventFilter($this, $this->app);
+			$groupFilter->setGroup($group);
+			$groupFilter->setPresentOrFutureOnly(true);
+
 			$outFolder->addFileContents('group'.DIRECTORY_SEPARATOR.$group->getSlug(),'index.html',$twig->render('group/index.html.twig', array_merge($data, array(
 				'group'=>$group,
+				'events'=>$groupFilter->get(),
 			))));
 		}
 	}

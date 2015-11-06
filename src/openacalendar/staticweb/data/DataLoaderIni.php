@@ -47,6 +47,12 @@ class DataLoaderIni extends  BaseDataLoader {
 				$event->setTimeZone($data['event']['timezone']);
 			}
 
+			if (isset($data['event']['group_slug']) && $data['event']['group_slug']) {
+				$event->addGroupSlug($data['event']['group_slug']);
+			}
+
+
+
 			return $event;
 		}
 

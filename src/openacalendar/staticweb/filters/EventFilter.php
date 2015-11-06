@@ -3,6 +3,7 @@
 namespace openacalendar\staticweb\filters;
 
 use openacalendar\staticweb\Site;
+use openacalendar\staticweb\models\Group;
 
 /**
  *
@@ -30,11 +31,22 @@ class EventFilter {
 
   protected $events;
 
+  // Filters!!
+
   protected $presentOrFutureOnly = false;
 
   public function setPresentOrFutureOnly($value) {
     $this->presentOrFutureOnly = $value;
   }
+
+  /** @var Group **/
+  protected $group;
+
+  public function setGroup(Group $group) {
+      $this->group = $group;
+  }
+
+  // Processing .....
 
   public function build() {
     $this->events = array();
@@ -44,6 +56,18 @@ class EventFilter {
 
         if ($this->presentOrFutureOnly) {
           if ($event->getEnd()->getTimeStamp() < $this->timesource->time() ) {
+            $include = false;
+          }
+        }
+
+        if ($this->group) {
+          $foundIt = false;
+          foreach($event->getGroupSlugs() as $slug) {
+            if ($slug == $this->group->getSlug()) {
+              $foundIt= true;
+            }
+          }
+          if (!$foundIt) {
             $include = false;
           }
         }

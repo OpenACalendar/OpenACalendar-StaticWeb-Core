@@ -29,6 +29,8 @@ class Event {
 	protected $timeZone;
 
 
+	protected $groupSlugs = array();
+
 	/**
 	 * @return mixed
 	 */
@@ -136,6 +138,14 @@ class Event {
 	public function setTimeZone($timeZone)
 	{
 		$this->timeZone = $timeZone;
+	}
+
+	public function addGroupSlug($groupSlug) {
+		$this->groupSlugs[] = $groupSlug;
+	}
+
+	public function getGroupSlugs() {
+		return $this->groupSlugs;
 	}
 
 	public function setDefaults(Config $config) {

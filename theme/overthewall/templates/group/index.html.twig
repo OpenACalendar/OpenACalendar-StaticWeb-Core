@@ -18,4 +18,16 @@
 		</li>
 	</ul>
 
+
+	<ul>
+		{%  for event in events %}
+			<li>
+				<div class="">{{  event.title }}</div>
+				<div class="">{{  event.start | date("F jS \\a\\t g:ia") }}</div>
+				<div class="">{{  event.end | date("F jS \\a\\t g:ia") }}</div>
+				<div class=""><a href="{{ config.baseURL }}/event/{{  event.slug }}/">More</a></div>
+			</li>
+		{% endfor %}
+	</ul>
+
 {% endblock %}
