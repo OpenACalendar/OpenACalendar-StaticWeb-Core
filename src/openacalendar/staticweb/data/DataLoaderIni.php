@@ -40,6 +40,10 @@ class DataLoaderIni extends  BaseDataLoader {
 			$event->setStart($data['event']['start']);
 			$event->setEnd($data['event']['end']);
 
+			if (isset($data['event']['description']) && $data['event']['description']) {
+				$event->setDescription($data['event']['description']);
+			}
+
 			if (isset($data['event']['country']) && $data['event']['country']) {
 				$event->setCountry($data['event']['country']);
 			}
@@ -66,6 +70,9 @@ class DataLoaderIni extends  BaseDataLoader {
 
 			$group->setTitle($data['group']['title']);
 
+			if (isset($data['group']['description']) && $data['group']['description']) {
+				$group->setDescription($data['group']['description']);
+			}
 
 			return $group;
 		}

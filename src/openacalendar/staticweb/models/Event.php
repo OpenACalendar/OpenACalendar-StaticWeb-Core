@@ -28,6 +28,7 @@ class Event {
 
 	protected $timeZone;
 
+  protected $description;
 
 	protected $groupSlugs = array();
 
@@ -146,6 +147,14 @@ class Event {
 
 	public function getGroupSlugs() {
 		return $this->groupSlugs;
+	}
+
+	public function setDescription($description) {
+		$this->description = $description;
+	}
+
+	public function getDescription() {
+		return $this->description;
 	}
 
 	public function setDefaults(Config $config) {

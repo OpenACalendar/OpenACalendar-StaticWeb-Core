@@ -17,6 +17,8 @@ class Group
 
 	protected $title;
 
+  protected $description;
+
 	/**
 	 * @return mixed
 	 */
@@ -51,6 +53,14 @@ class Group
 	public function setTitle($title)
 	{
 		$this->title = $title;
+	}
+
+	public function setDescription($description) {
+		$this->description = $description;
+	}
+
+	public function getDescription() {
+		return $this->description;
 	}
 
 
