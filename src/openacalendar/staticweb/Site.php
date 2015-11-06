@@ -14,6 +14,7 @@ use openacalendar\staticweb\datawarnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
 use openacalendar\staticweb\filters\EventFilter;
+use openacalendar\staticweb\filters\GroupFilter;
 use Pimple\Container;
 
 /**
@@ -163,8 +164,11 @@ class Site {
 		))));
 
 		foreach($this->events as $event) {
+			$groupFilter = new GroupFilter($this, $this->app);
+			$groupFilter->setEvent($event);
 			$outFolder->addFileContents('event'.DIRECTORY_SEPARATOR.$event->getSlug(),'index.html',$twig->render('event/index.html.twig', array_merge($data, array(
 				'event'=>$event,
+				'groups'=>$groupFilter->get(),
 			))));
 		}
 
@@ -251,8 +255,5 @@ class Site {
 		}
 		return $this->groups;
 	}
-
-
-
 
 }

@@ -22,4 +22,14 @@
 		</li>
 	</ul>
 
+
+  	<ul>
+  		{%  for group in groups %}
+  			<li>
+  				<div class="">Group: {{  group.title }}</div>
+  				<div class=""><a href="{{ config.baseURL }}/group/{{  group.slug }}/">More</a></div>
+  			</li>
+  		{% endfor %}
+  	</ul>
+
 {% endblock %}
