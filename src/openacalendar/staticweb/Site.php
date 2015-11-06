@@ -177,19 +177,8 @@ class Site {
 		}
 
 		// Group pages
-		$outFolder->addFileContents('group','index.html', $twig->render('grouplist/index.html.twig', array_merge($data, array(
-		))));
-
-		foreach($this->groups as $group) {
-			$groupFilter = new EventFilter($this, $this->app);
-			$groupFilter->setGroup($group);
-			$groupFilter->setPresentOrFutureOnly(true);
-
-			$outFolder->addFileContents('group'.DIRECTORY_SEPARATOR.$group->getSlug(),'index.html',$twig->render('group/index.html.twig', array_merge($data, array(
-				'group'=>$group,
-				'events'=>$groupFilter->get(),
-			))));
-		}
+		$x = new \openacalendar\staticweb\writecomponents\GroupWriteComponent($this->app, $this, $outFolder, $twigHelper);
+		$x->write();
 	}
 
 	/**
