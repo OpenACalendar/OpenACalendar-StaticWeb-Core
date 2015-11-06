@@ -23,4 +23,6 @@ class Config {
 
 	public $defaultTimeZone = "Europe/London";
 
+	public $baseURL = '';
+
 }

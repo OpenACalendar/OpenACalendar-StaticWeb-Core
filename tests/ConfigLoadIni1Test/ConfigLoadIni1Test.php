@@ -21,7 +21,7 @@ class ConfigLoadIni1Test extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($defaultConfig->theme, $site->getConfig()->theme);
 		$this->assertEquals($defaultConfig->defaultTimeZone, $site->getConfig()->defaultTimeZone);
 		$this->assertEquals($defaultConfig->defaultCountry, $site->getConfig()->defaultCountry);
-
+		$this->assertEquals($defaultConfig->baseURL, $site->getConfig()->baseURL);
 	}
 
 	function testTitle() {
@@ -35,7 +35,22 @@ class ConfigLoadIni1Test extends PHPUnit_Framework_TestCase {
 		$this->assertEquals($defaultConfig->theme, $site->getConfig()->theme);
 		$this->assertEquals($defaultConfig->defaultTimeZone, $site->getConfig()->defaultTimeZone);
 		$this->assertEquals($defaultConfig->defaultCountry, $site->getConfig()->defaultCountry);
+		$this->assertEquals($defaultConfig->baseURL, $site->getConfig()->baseURL);
 
+	}
+
+	function testBaseURL() {
+		global $app;
+
+		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteBaseURL');
+
+		$defaultConfig = new \openacalendar\staticweb\config\Config();
+
+		$this->assertEquals($defaultConfig->title, $site->getConfig()->title);
+		$this->assertEquals($defaultConfig->theme, $site->getConfig()->theme);
+		$this->assertEquals($defaultConfig->defaultTimeZone, $site->getConfig()->defaultTimeZone);
+		$this->assertEquals($defaultConfig->defaultCountry, $site->getConfig()->defaultCountry);
+		$this->assertEquals('/events/', $site->getConfig()->baseURL);
 	}
 
 }

@@ -13,12 +13,18 @@ require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEP
 
 
 
-$opts = getopt('',array('help','build','out:','site:'));
+$opts = getopt('',array('help','build','out:','site:','baseurl:'));
 
 
 if (isset($opts['help'])) {
 	print "HELP PAGE\n";
 	die();
+}
+
+function setConfig(\openacalendar\staticweb\Site $site, $opts) {
+	if (isset($opts['baseurl']) && $opts['baseurl']) {
+		$site->getConfig()->baseURL = $opts['baseurl'];
+	}
 }
 
 if (isset($opts['build'])) {
@@ -32,6 +38,7 @@ if (isset($opts['build'])) {
 	}
 
 	$site = new \openacalendar\staticweb\Site($app, $opts['site']);
+	setConfig($site, $opts);
 
 	if ($site->getDataWarnings()) {
 		print "Warnings:\n\n";
