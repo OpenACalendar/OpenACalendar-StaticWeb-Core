@@ -13,6 +13,7 @@ use openacalendar\staticweb\datawarnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\datawarnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
+use openacalendar\staticweb\filters\EventFilter;
 use Pimple\Container;
 
 /**
@@ -143,7 +144,10 @@ class Site {
 			'config'=>$this->config,
 		);
 
-		$eventsCurrentOrFuture = $this->getEventsCurrentOrFuture();
+
+		$eventsCurrentOrFutureFilter = new EventFilter($this, $this->app);
+		$eventsCurrentOrFutureFilter->setPresentOrFutureOnly(true);
+		$eventsCurrentOrFuture = $eventsCurrentOrFutureFilter->get();
 
 		// Index
 		$outFolder->addFileContents('','index.html', $twig->render('index.html.twig', array_merge($data, array(
@@ -230,23 +234,6 @@ class Site {
 			$this->load();
 		}
 		return $this->events;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getEventsCurrentOrFuture()
-	{
-		if (!$this->isLoaded) {
-			$this->load();
-		}
-		$out = array();
-		foreach($this->events as $event) {
-			if ($event->getEnd()->getTimeStamp() >= $this->app['timesource']->time() ) {
-				$out[] = $event;
-			}
-		}
-		return $out;
 	}
 
 	/**
