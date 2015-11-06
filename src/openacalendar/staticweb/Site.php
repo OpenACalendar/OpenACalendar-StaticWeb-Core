@@ -9,6 +9,7 @@ use openacalendar\staticweb\config\ConfigLoaderIni;
 use openacalendar\staticweb\data\DataLoaderIni;
 use openacalendar\staticweb\dataerrors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\dataerrors\DataErrorTwoGroupsHaveSameSlugs;
+use openacalendar\staticweb\dataerrors\DataErrorEndBeforeStart;
 use openacalendar\staticweb\datawarnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\datawarnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\Event;
@@ -109,6 +110,9 @@ class Site {
 			if ($existingEvent->getSlug() == $event->getSlug()) {
 				$this->dataErrors[] = new DataErrorTwoEventsHaveSameSlugs();
 			}
+		}
+		if ($event->getStart()->getTimestamp() > $event->getEnd()->getTimestamp()) {
+			$this->dataErrors[] = new DataErrorEndBeforeStart();
 		}
 		$this->events[] = $event;
 	}
