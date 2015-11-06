@@ -134,6 +134,7 @@ class Site {
 		$twigHelper = new TwigHelper($this);
 		$twig = $twigHelper->getTwig();
 
+		$outFolder = new OutFolder($outDir);
 
 		// General Data
 		$data = array(
@@ -145,56 +146,32 @@ class Site {
 		$eventsCurrentOrFuture = $this->getEventsCurrentOrFuture();
 
 		// Index
-		file_put_contents(
-			$outDir.DIRECTORY_SEPARATOR.'index.html',
-			$twig->render('index.html.twig', array_merge($data, array(
-				'events'=>$eventsCurrentOrFuture,
-			)))
-		);
-
+		$outFolder->addFileContents('','index.html', $twig->render('index.html.twig', array_merge($data, array(
+			'events'=>$eventsCurrentOrFuture,
+		))));
 
 		// Event pages
-		mkdir($outDir.DIRECTORY_SEPARATOR.'event');
+		$outFolder->addFileContents('event','index.html',$twig->render('eventlist/index.html.twig', array_merge($data, array(
+			'events'=>$eventsCurrentOrFuture,
+		))));
 
-		file_put_contents(
-			$outDir.DIRECTORY_SEPARATOR.'event'.DIRECTORY_SEPARATOR.'index.html',
-			$twig->render('eventlist/index.html.twig', array_merge($data, array(
-				'events'=>$eventsCurrentOrFuture,
-			)))
-		);
-
-		file_put_contents(
-			$outDir.DIRECTORY_SEPARATOR.'event'.DIRECTORY_SEPARATOR.'all.html',
-			$twig->render('eventlist/all.html.twig', array_merge($data, array(
-			)))
-		);
+		$outFolder->addFileContents('event','all.html',$twig->render('eventlist/all.html.twig', array_merge($data, array(
+		))));
 
 		foreach($this->events as $event) {
-			mkdir($outDir.DIRECTORY_SEPARATOR.'event'.DIRECTORY_SEPARATOR.$event->getSlug());
-			file_put_contents(
-				$outDir.DIRECTORY_SEPARATOR.'event'.DIRECTORY_SEPARATOR.$event->getSlug().DIRECTORY_SEPARATOR.'index.html',
-				$twig->render('event/index.html.twig', array_merge($data, array(
-					'event'=>$event,
-				)))
-			);
-
+			$outFolder->addFileContents('event'.DIRECTORY_SEPARATOR.$event->getSlug(),'index.html',$twig->render('event/index.html.twig', array_merge($data, array(
+				'event'=>$event,
+			))));
 		}
 
 		// Group pages
-		mkdir($outDir.DIRECTORY_SEPARATOR.'group');
-
-		file_put_contents(
-			$outDir.DIRECTORY_SEPARATOR.'group'.DIRECTORY_SEPARATOR.'index.html',
-			$twig->render('grouplist/index.html.twig', $data)
-		);
+		$outFolder->addFileContents('group','index.html', $twig->render('grouplist/index.html.twig', array_merge($data, array(
+		))));
 
 		foreach($this->groups as $group) {
-			mkdir($outDir.DIRECTORY_SEPARATOR.'group'.DIRECTORY_SEPARATOR.$group->getSlug());
-			file_put_contents(
-				$outDir.DIRECTORY_SEPARATOR.'group'.DIRECTORY_SEPARATOR.$group->getSlug().DIRECTORY_SEPARATOR.'index.html',
-				$twig->render('group/index.html.twig', array_merge($data, array('group'=>$group)))
-			);
-
+			$outFolder->addFileContents('group'.DIRECTORY_SEPARATOR.$group->getSlug(),'index.html',$twig->render('group/index.html.twig', array_merge($data, array(
+				'group'=>$group,
+			))));
 		}
 	}
 
