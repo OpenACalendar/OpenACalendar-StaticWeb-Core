@@ -1,7 +1,7 @@
 <?php
 
 
-namespace openacalendar\staticweb\dataerrors;
+namespace openacalendar\staticweb\warnings;
 
 /**
  *
@@ -11,6 +11,6 @@ namespace openacalendar\staticweb\dataerrors;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class DataErrorTwoEventsHaveSameSlugs extends BaseDataError {
+class DataWarningEventHasNoSlug extends BaseWarning {
 
 }

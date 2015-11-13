@@ -40,16 +40,16 @@ if (isset($opts['build'])) {
 	$site = new \openacalendar\staticweb\Site($app, $opts['site']);
 	setConfig($site, $opts);
 
-	if ($site->getDataWarnings()) {
+	if ($site->getWarnings()) {
 		print "Warnings:\n\n";
-		foreach($site->getDataWarnings() as $warning) {
+		foreach($site->getWarnings() as $warning) {
 			print get_class($warning)."\n\n";
 		}
 	}
 
-	if ($site->getDataErrors()) {
+	if ($site->getErrors()) {
 		print "ERRORS:\n\n";
-		foreach($site->getDataErrors() as $error) {
+		foreach($site->getErrors() as $error) {
 			print get_class($error)."\n\n";
 		}
 	} else {

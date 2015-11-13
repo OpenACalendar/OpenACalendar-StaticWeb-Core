@@ -2,9 +2,9 @@
 
 namespace openacalendar\staticweb\data;
 
-use openacalendar\staticweb\dataerrors\DataErrorInvalidCountry;
-use openacalendar\staticweb\dataerrors\DataErrorInvalidTimeZone;
-use openacalendar\staticweb\dataerrors\DataErrorInvalidTimeZoneForCountry;
+use openacalendar\staticweb\errors\DataErrorInvalidCountry;
+use openacalendar\staticweb\errors\DataErrorInvalidTimeZone;
+use openacalendar\staticweb\errors\DataErrorInvalidTimeZoneForCountry;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
 use openacalendar\staticweb\Site;

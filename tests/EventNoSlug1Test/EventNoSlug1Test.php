@@ -16,12 +16,12 @@ class EventNoSlug1Test extends PHPUnit_Framework_TestCase {
 		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'site');
 		$site->load();
 
-		$warnings = $site->getDataWarnings();
+		$warnings = $site->getWarnings();
 		$this->assertEquals(1, count($warnings));
 		$warning = $warnings[0];
-		$this->assertEquals('openacalendar\staticweb\datawarnings\DataWarningEventHasNoSlug', get_class($warning));
+		$this->assertEquals('openacalendar\staticweb\warnings\DataWarningEventHasNoSlug', get_class($warning));
 
-		$errors = $site->getDataErrors();
+		$errors = $site->getErrors();
 		$this->assertEquals(0, count($errors));
 
 

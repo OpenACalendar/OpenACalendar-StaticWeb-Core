@@ -1,7 +1,7 @@
 <?php
 
 
-namespace openacalendar\staticweb\datawarnings;
+namespace openacalendar\staticweb\errors;
 
 /**
  *
@@ -11,6 +11,7 @@ namespace openacalendar\staticweb\datawarnings;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class DataWarningEventHasNoSlug extends BaseDataWarning {
+class DataErrorInvalidTimeZone extends BaseError {
 
 }
+

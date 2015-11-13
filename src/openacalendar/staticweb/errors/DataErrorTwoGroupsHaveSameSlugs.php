@@ -1,7 +1,7 @@
 <?php
 
 
-namespace openacalendar\staticweb\dataerrors;
+namespace openacalendar\staticweb\errors;
 
 /**
  *
@@ -11,7 +11,6 @@ namespace openacalendar\staticweb\dataerrors;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class DataErrorInvalidTimeZone extends BaseDataError {
+class DataErrorTwoGroupsHaveSameSlugs extends BaseError {
 
 }
-

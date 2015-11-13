@@ -7,11 +7,11 @@ namespace openacalendar\staticweb;
 use openacalendar\staticweb\config\Config;
 use openacalendar\staticweb\config\ConfigLoaderIni;
 use openacalendar\staticweb\data\DataLoaderIni;
-use openacalendar\staticweb\dataerrors\DataErrorTwoEventsHaveSameSlugs;
-use openacalendar\staticweb\dataerrors\DataErrorTwoGroupsHaveSameSlugs;
-use openacalendar\staticweb\dataerrors\DataErrorEndBeforeStart;
-use openacalendar\staticweb\datawarnings\DataWarningEventHasNoSlug;
-use openacalendar\staticweb\datawarnings\DataWarningGroupHasNoSlug;
+use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
+use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
+use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
+use openacalendar\staticweb\warnings\DataWarningEventHasNoSlug;
+use openacalendar\staticweb\warnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
 use openacalendar\staticweb\filters\EventFilter;
@@ -81,8 +81,8 @@ class Site {
 	
 	protected $isLoaded = false;
 
-	protected $dataErrors = array();
-	protected $dataWarnings = array();
+	protected $errors = array();
+	protected $warnings = array();
 
 	protected $events = array();
 	protected $groups = array();
@@ -99,8 +99,8 @@ class Site {
 				foreach($loaders as $loader) {
 					if ($loader->isLoadableDataInSite($this, $fileName)) {
 						$out = $loader->loadDataInSite($this, $fileName);
-						if (is_a($out, 'openacalendar\staticweb\dataerrors\BaseDataError')) {
-							$this->dataErrors[] = $out;
+						if (is_a($out, 'openacalendar\staticweb\errors\BaseError')) {
+							$this->errors[] = $out;
 						} else if (is_a($out, 'openacalendar\staticweb\models\Event')) {
 							$this->addEvent($out);
 						} else if (is_a($out, 'openacalendar\staticweb\models\Group')) {
@@ -132,28 +132,28 @@ class Site {
 
 	protected function addEvent(Event $event) {
 		if (!$event->getSlug()) {
-			$this->dataWarnings[] = new DataWarningEventHasNoSlug();
+			$this->warnings[] = new DataWarningEventHasNoSlug();
 			$event->createSlug();
 		}
 		foreach($this->events as $existingEvent) {
 			if ($existingEvent->getSlug() == $event->getSlug()) {
-				$this->dataErrors[] = new DataErrorTwoEventsHaveSameSlugs();
+				$this->errors[] = new DataErrorTwoEventsHaveSameSlugs();
 			}
 		}
 		if ($event->getStart()->getTimestamp() > $event->getEnd()->getTimestamp()) {
-			$this->dataErrors[] = new DataErrorEndBeforeStart();
+			$this->errors[] = new DataErrorEndBeforeStart();
 		}
 		$this->events[] = $event;
 	}
 
 	protected function addGroup(Group $group) {
 		if (!$group->getSlug()) {
-			$this->dataWarnings[] = new DataWarningGroupHasNoSlug();
+			$this->warnings[] = new DataWarningGroupHasNoSlug();
 			$group->createSlug();
 		}
 		foreach($this->groups as $existingGroups) {
 			if ($existingGroups->getSlug() == $group->getSlug()) {
-				$this->dataErrors[] = new DataErrorTwoGroupsHaveSameSlugs();
+				$this->errors[] = new DataErrorTwoGroupsHaveSameSlugs();
 			}
 		}
 		$this->groups[] = $group;
@@ -237,23 +237,23 @@ class Site {
 	/**
 	 * @return array
 	 */
-	public function getDataErrors()
+	public function getErrors()
 	{
 		if (!$this->isLoaded) {
 			$this->load();
 		}
-		return $this->dataErrors;
+		return $this->errors;
 	}
 
 	/**
 	 * @return array
 	 */
-	public function getDataWarnings()
+	public function getWarnings()
 	{
 		if (!$this->isLoaded) {
 			$this->load();
 		}
-		return $this->dataWarnings;
+		return $this->warnings;
 	}
 
 	/**

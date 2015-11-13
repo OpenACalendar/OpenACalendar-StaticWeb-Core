@@ -16,13 +16,13 @@ class GroupSameSlugs1Test extends PHPUnit_Framework_TestCase {
 		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'site');
 		$site->load();
 
-		$warnings = $site->getDataWarnings();
+		$warnings = $site->getWarnings();
 		$this->assertEquals(0, count($warnings));
 
-		$errors = $site->getDataErrors();
+		$errors = $site->getErrors();
 		$this->assertEquals(1, count($errors));
 		$error = $errors[0];
-		$this->assertEquals('openacalendar\staticweb\dataerrors\DataErrorTwoGroupsHaveSameSlugs', get_class($error));
+		$this->assertEquals('openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs', get_class($error));
 
 
 

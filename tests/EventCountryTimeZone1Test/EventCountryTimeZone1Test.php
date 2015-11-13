@@ -16,10 +16,10 @@ class EventCountryTimeZone1Test extends PHPUnit_Framework_TestCase {
 		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteValid');
 		$site->load();
 
-		$warnings = $site->getDataWarnings();
+		$warnings = $site->getWarnings();
 		$this->assertEquals(0, count($warnings));
 
-		$errors = $site->getDataErrors();
+		$errors = $site->getErrors();
 		$this->assertEquals(0, count($errors));
 
 
@@ -31,13 +31,13 @@ class EventCountryTimeZone1Test extends PHPUnit_Framework_TestCase {
 		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteInvalidCountry');
 		$site->load();
 
-		$warnings = $site->getDataWarnings();
+		$warnings = $site->getWarnings();
 		$this->assertEquals(0, count($warnings));
 
-		$errors = $site->getDataErrors();
+		$errors = $site->getErrors();
 		$this->assertEquals(1, count($errors));
 		$error = $errors[0];
-		$this->assertEquals('openacalendar\staticweb\dataerrors\DataErrorInvalidCountry', get_class($error));
+		$this->assertEquals('openacalendar\staticweb\errors\DataErrorInvalidCountry', get_class($error));
 
 
 	}
@@ -48,13 +48,13 @@ class EventCountryTimeZone1Test extends PHPUnit_Framework_TestCase {
 		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteInvalidTimeZone');
 		$site->load();
 
-		$warnings = $site->getDataWarnings();
+		$warnings = $site->getWarnings();
 		$this->assertEquals(0, count($warnings));
 
-		$errors = $site->getDataErrors();
+		$errors = $site->getErrors();
 		$this->assertEquals(1, count($errors));
 		$error = $errors[0];
-		$this->assertEquals('openacalendar\staticweb\dataerrors\DataErrorInvalidTimeZone', get_class($error));
+		$this->assertEquals('openacalendar\staticweb\errors\DataErrorInvalidTimeZone', get_class($error));
 
 
 	}
@@ -65,13 +65,13 @@ class EventCountryTimeZone1Test extends PHPUnit_Framework_TestCase {
 		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteInvalidTimeZoneForCountry');
 		$site->load();
 
-		$warnings = $site->getDataWarnings();
+		$warnings = $site->getWarnings();
 		$this->assertEquals(0, count($warnings));
 
-		$errors = $site->getDataErrors();
+		$errors = $site->getErrors();
 		$this->assertEquals(1, count($errors));
 		$error = $errors[0];
-		$this->assertEquals('openacalendar\staticweb\dataerrors\DataErrorInvalidTimeZoneForCountry', get_class($error));
+		$this->assertEquals('openacalendar\staticweb\errors\DataErrorInvalidTimeZoneForCountry', get_class($error));
 
 
 	}
