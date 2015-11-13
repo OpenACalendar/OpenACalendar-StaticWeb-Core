@@ -36,8 +36,8 @@ class ConfigLoaderIni extends BaseConfigLoader {
 		if (isset($data['default_country']) && $data['default_country']) {
 			$config->defaultCountry = $data['default_country']; // TODO check valid
 		}
-		if (isset($data['deafult_timezone']) && $data['deafult_timezone']) {
-			$config->defaultTimeZone = $data['deafult_timezone']; // TODO check valid
+		if (isset($data['default_timezone']) && $data['default_timezone']) {
+			$config->defaultTimeZone = $data['default_timezone']; // TODO check valid
 		}
 		if (isset($data['base_url']) && $data['base_url']) {
 			$config->baseURL = $data['base_url']; 
