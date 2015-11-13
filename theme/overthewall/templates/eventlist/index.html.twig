@@ -19,11 +19,11 @@
 				<div class="">{{  event.description | nl2br }}</div>
 				<div class="">{{  event.start | date("F jS \\a\\t g:ia") }}</div>
 				<div class="">{{  event.end | date("F jS \\a\\t g:ia") }}</div>
-				<div class=""><a href="{{  event.slug }}/">More</a></div>
+				<div class=""><a href="{{ ("/event/" ~ event.slug) | internalLink }}">More</a></div>
 			</li>
 		{% endfor %}
 	</ul>
 
-	<p>To see all events (including old ones), <a href="all.html">click here</a></p>
+	<p>To see all events (including old ones), <a href="{{ "/event/all.html" | internalLink }}">click here</a></p>
 
 {% endblock %}

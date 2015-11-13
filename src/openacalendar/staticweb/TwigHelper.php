@@ -3,6 +3,7 @@
 
 namespace openacalendar\staticweb;
 
+use openacalendar\staticweb\twig\extensions\InternalLinkHelper;
 use \Twig_Environment;
 use \Twig_Loader_Filesystem;
 
@@ -37,6 +38,7 @@ class TwigHelper
 		$this->twig = new Twig_Environment($loader, array(
 			'cache' => $this->cacheDir->get(),
 		));
+		$this->twig->addExtension(new InternalLinkHelper($site->getConfig()));
 	}
 
 	/**

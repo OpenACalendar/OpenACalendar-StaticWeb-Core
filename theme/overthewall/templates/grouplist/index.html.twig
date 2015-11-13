@@ -17,7 +17,7 @@
 			<li>
 				<div class="">{{  group.title }}</div>
 				<div class="">{{  group.description | nl2br }}</div>
-				<div class=""><a href="{{  group.slug }}/">More</a></div>
+				<div class=""><a href="{{ ("/group/" ~ group.slug) | internalLink }}">More</a></div>
 			</li>
 		{% endfor %}
 	</ul>

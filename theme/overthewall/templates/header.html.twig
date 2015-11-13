@@ -7,7 +7,7 @@
  #}
 
 <ul>
-  <li><a href="{{ config.baseURL }}">{{ config.title }}</a></li>
-  <li><a href="{{ config.baseURL }}/event">Events</a></li>
-  <li><a href="{{ config.baseURL }}/group">Groups</a></li>
+  <li><a href="{{ '/' | internalLink }}">{{ config.title }}</a></li>
+  <li><a href="{{ '/event/' | internalLink }}">Events</a></li>
+  <li><a href="{{ '/group/' | internalLink }}">Groups</a></li>
 </ul>
