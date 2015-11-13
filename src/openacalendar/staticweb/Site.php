@@ -7,6 +7,9 @@ namespace openacalendar\staticweb;
 use openacalendar\staticweb\config\Config;
 use openacalendar\staticweb\config\ConfigLoaderIni;
 use openacalendar\staticweb\data\DataLoaderIni;
+use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultCountry;
+use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZone;
+use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZoneForDefaultCountry;
 use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
@@ -57,10 +60,16 @@ class Site {
 		}
 
 		$this->defaultCountry = $this->app['staticdatahelper']->getCountry($this->config->defaultCountry);
-		// TODO error if null
+		if (!$this->defaultCountry) {
+			$this->errors[] = new ConfigErrorInvalidDefaultCountry();
+		}
 		$this->defaultTimeZone = $this->app['staticdatahelper']->getTimeZone($this->config->defaultTimeZone);
-		// TODO error if null or not in country
-
+		if (!$this->defaultTimeZone) {
+			$this->errors[] = new ConfigErrorInvalidDefaultTimeZone();
+		}
+		if ($this->defaultCountry && $this->defaultTimeZone && !$this->defaultCountry->hasTimeZone($this->defaultTimeZone)) {
+			$this->errors[] = new ConfigErrorInvalidDefaultTimeZoneForDefaultCountry();
+		}
 	}
 
 	/**

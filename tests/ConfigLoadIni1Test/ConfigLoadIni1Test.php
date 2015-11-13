@@ -53,4 +53,69 @@ class ConfigLoadIni1Test extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('/events/', $site->getConfig()->baseURL);
 	}
 
+	function testValid() {
+		global $app;
+
+		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteValidCountryTimeZone');
+		$site->load();
+
+		$warnings = $site->getWarnings();
+		$this->assertEquals(0, count($warnings));
+
+		$errors = $site->getErrors();
+		$this->assertEquals(0, count($errors));
+
+
+	}
+
+	function testInvalidCountry() {
+		global $app;
+
+		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteInvalidCountry');
+		$site->load();
+
+		$warnings = $site->getWarnings();
+		$this->assertEquals(0, count($warnings));
+
+		$errors = $site->getErrors();
+		$this->assertEquals(1, count($errors));
+		$error = $errors[0];
+		$this->assertEquals('openacalendar\staticweb\errors\ConfigErrorInvalidDefaultCountry', get_class($error));
+
+
+	}
+
+	function testInvalidTimeZone() {
+		global $app;
+
+		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteInvalidTimeZone');
+		$site->load();
+
+		$warnings = $site->getWarnings();
+		$this->assertEquals(0, count($warnings));
+
+		$errors = $site->getErrors();
+		$this->assertEquals(1, count($errors));
+		$error = $errors[0];
+		$this->assertEquals('openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZone', get_class($error));
+
+
+	}
+
+	function testInvalidTimeZoneForCountry() {
+		global $app;
+
+		$site = new \openacalendar\staticweb\Site($app, __DIR__.DIRECTORY_SEPARATOR.'siteInvalidTimeZoneForCountry');
+		$site->load();
+
+		$warnings = $site->getWarnings();
+		$this->assertEquals(0, count($warnings));
+
+		$errors = $site->getErrors();
+		$this->assertEquals(1, count($errors));
+		$error = $errors[0];
+		$this->assertEquals('openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZoneForDefaultCountry', get_class($error));
+
+
+	}
 }
