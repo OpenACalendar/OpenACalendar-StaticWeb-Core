@@ -1,9 +1,8 @@
 <?php
 
+namespace openacalendar\staticweb\models;
 
-namespace openacalendar\staticweb\config;
-
-use openacalendar\staticweb\Site;
+use openacalendar\staticweb\config\Config;
 
 /**
  *
@@ -13,17 +12,27 @@ use openacalendar\staticweb\Site;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-abstract class  BaseConfigLoader {
+class TimeZone
+{
 
-	protected $app;
 
-	function __construct($app)
+	protected $code;
+
+	function __construct($code)
 	{
-		$this->app = $app;
+		$this->code = $code;
 	}
 
-	abstract function isLoadableConfigInSite(Site $site);
+	/**
+	 * @return mixed
+	 */
+	public function getCode()
+	{
+		return $this->code;
+	}
 
-	abstract function loadConfigInSite(Config $config, Site $site);
+
+
 
 }
+

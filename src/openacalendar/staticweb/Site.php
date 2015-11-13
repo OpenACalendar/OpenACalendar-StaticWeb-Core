@@ -36,6 +36,12 @@ class Site {
 	/** @var  Config */
 	protected $config;
 
+	/** @var  Country */
+	protected $defaultCountry;
+
+	/** @var  TimeZone */
+	protected $defaultTimeZone;
+
 	function __construct(Container $app, $dir)
 	{
 		$this->app = $app;
@@ -43,15 +49,36 @@ class Site {
 		$this->config = new Config();
 
 		foreach(array(
-			New ConfigLoaderIni(),
+			New ConfigLoaderIni($this->app),
 				) as $loader) {
 			if ($loader->isLoadableConfigInSite($this)) {
 				$loader->loadConfigInSite($this->config, $this);
 			}
 		}
 
+		$this->defaultCountry = $this->app['staticdatahelper']->getCountry($this->config->defaultCountry);
+		// TODO error if null
+		$this->defaultTimeZone = $this->app['staticdatahelper']->getTimeZone($this->config->defaultTimeZone);
+		// TODO error if null or not in country
+
 	}
 
+	/**
+	 * @return Country
+	 */
+	public function getDefaultCountry()
+	{
+		return $this->defaultCountry;
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function getDefaultTimeZone()
+	{
+		return $this->defaultTimeZone;
+	}
+	
 	protected $isLoaded = false;
 
 	protected $dataErrors = array();
@@ -63,7 +90,7 @@ class Site {
 	function load() {
 
 		$loaders = array(
-			new DataLoaderIni(),
+			new DataLoaderIni($this->app),
 		);
 
 		foreach(scandir($this->dir . DIRECTORY_SEPARATOR. "data") as $fileName) {
@@ -72,7 +99,9 @@ class Site {
 				foreach($loaders as $loader) {
 					if ($loader->isLoadableDataInSite($this, $fileName)) {
 						$out = $loader->loadDataInSite($this, $fileName);
-						if (is_a($out, 'openacalendar\staticweb\models\Event')) {
+						if (is_a($out, 'openacalendar\staticweb\dataerrors\BaseDataError')) {
+							$this->dataErrors[] = $out;
+						} else if (is_a($out, 'openacalendar\staticweb\models\Event')) {
 							$this->addEvent($out);
 						} else if (is_a($out, 'openacalendar\staticweb\models\Group')) {
 							$this->addGroup($out);

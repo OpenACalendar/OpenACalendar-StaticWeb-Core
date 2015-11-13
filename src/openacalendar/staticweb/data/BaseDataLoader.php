@@ -14,6 +14,14 @@ use openacalendar\staticweb\Site;
  */
 abstract class BaseDataLoader {
 
+	protected $app;
+
+	function __construct($app)
+	{
+		$this->app = $app;
+	}
+
+
 	abstract function  isLoadableDataInSite(Site $site, $filename);
 
 	abstract function loadDataInSite(Site $site, $filename);

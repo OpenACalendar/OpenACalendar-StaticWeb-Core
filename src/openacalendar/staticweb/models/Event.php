@@ -157,9 +157,4 @@ class Event {
 		return $this->description;
 	}
 
-	public function setDefaults(Config $config) {
-		$this->timeZone = $config->defaultTimeZone;
-		$this->country = $config->defaultCountry;
-	}
-
 }

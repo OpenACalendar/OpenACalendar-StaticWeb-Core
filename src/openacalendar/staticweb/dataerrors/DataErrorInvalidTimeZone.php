@@ -1,9 +1,7 @@
 <?php
 
 
-namespace openacalendar\staticweb\config;
-
-use openacalendar\staticweb\Site;
+namespace openacalendar\staticweb\dataerrors;
 
 /**
  *
@@ -13,17 +11,7 @@ use openacalendar\staticweb\Site;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-abstract class  BaseConfigLoader {
-
-	protected $app;
-
-	function __construct($app)
-	{
-		$this->app = $app;
-	}
-
-	abstract function isLoadableConfigInSite(Site $site);
-
-	abstract function loadConfigInSite(Config $config, Site $site);
+class DataErrorInvalidTimeZone extends BaseDataError {
 
 }
+
