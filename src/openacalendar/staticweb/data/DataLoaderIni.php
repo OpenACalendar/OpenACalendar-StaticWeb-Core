@@ -19,14 +19,24 @@ use openacalendar\staticweb\Site;
  */
 class DataLoaderIni extends  BaseDataLoader {
 
-	function  isLoadableDataInSite(Site $site, $filename)
+	function  isLoadableDefaultDataInSite(Site $site, $filename, $folder='', $defaults=array())
 	{
-		return substr($filename, -4) == '.ini';
+		return substr($filename, -4) == '.ini' && $filename == 'data.ini';
 	}
 
-	function loadDataInSite(Site $site, $filename)
+	function  isLoadableNonDefaultDataInSite(Site $site, $filename, $folder='', $defaults=array())
 	{
-		$data = parse_ini_file($site->getDir().DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.$filename, true);
+		return substr($filename, -4) == '.ini' && $filename != 'data.ini';
+	}
+
+	function loadDataInSite(Site $site, $filename, $folder='', $defaults=array())
+	{
+
+		$isDefault = ($filename == 'data.ini');
+
+		$data = parse_ini_file($site->getDir().DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR.$filename, true);
+
+		$out = new DataLoadResult();
 
 		if (isset($data['event'])) {
 
@@ -51,18 +61,21 @@ class DataLoaderIni extends  BaseDataLoader {
 			if (isset($data['event']['country']) && $data['event']['country']) {
 				$country = $this->app['staticdatahelper']->getCountry($data['event']['country']);
 				if (!$country) {
-					return new DataErrorInvalidCountry();
+					$out->addError(new DataErrorInvalidCountry());
+					return $out;
 				}
 				$event->setCountry($country);
 			}
 			if (isset($data['event']['timezone']) && $data['event']['timezone']) {
 				$timezone = $this->app['staticdatahelper']->getTimeZone($data['event']['timezone']);
 				if (!$timezone) {
-					return new DataErrorInvalidTimeZone();
+					$out->addError(new DataErrorInvalidTimeZone());
+					return $out;
 				}
 				if (is_a($event->getCountry(),'openacalendar\staticweb\models\Country')) {
 					if (!$event->getCountry()->hasTimeZone($timezone)) {
-						return new DataErrorInvalidTimeZoneForCountry();
+						$out->addError(new DataErrorInvalidTimeZoneForCountry());
+						return $out;
 					}
 				}
 				$event->setTimeZone($timezone);
@@ -72,9 +85,13 @@ class DataLoaderIni extends  BaseDataLoader {
 				$event->addGroupSlug($data['event']['group_slug']);
 			}
 
+			foreach($defaults as $default) {
+				if (is_a($default,'openacalendar\staticweb\models\Group')) {
+					$event->addGroupSlug($default->getSlug());
+				}
+			}
 
-
-			return $event;
+			$out->addEvent($event);
 		}
 
 		if (isset($data['group'])) {
@@ -91,8 +108,13 @@ class DataLoaderIni extends  BaseDataLoader {
 				$group->setDescription($data['group']['description']);
 			}
 
-			return $group;
+			$out->addGroup($group);
+			if ($isDefault) {
+				$out->addDefault($group);
+			}
 		}
+
+		return $out;
 	}
 
 }

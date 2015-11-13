@@ -98,28 +98,7 @@ class Site {
 
 	function load() {
 
-		$loaders = array(
-			new DataLoaderIni($this->app),
-		);
-
-		foreach(scandir($this->dir . DIRECTORY_SEPARATOR. "data") as $fileName) {
-			if ($fileName != "." && $fileName != '..') {
-
-				foreach($loaders as $loader) {
-					if ($loader->isLoadableDataInSite($this, $fileName)) {
-						$out = $loader->loadDataInSite($this, $fileName);
-						if (is_a($out, 'openacalendar\staticweb\errors\BaseError')) {
-							$this->errors[] = $out;
-						} else if (is_a($out, 'openacalendar\staticweb\models\Event')) {
-							$this->addEvent($out);
-						} else if (is_a($out, 'openacalendar\staticweb\models\Group')) {
-							$this->addGroup($out);
-						}
-					}
-				}
-
-			}
-		}
+		$this->loadDir();
 
 		usort($this->events, function($a, $b) {
 			if ($a->getStart()->getTimeStamp() == $b->getStart()->getTimeStamp()) {
@@ -137,6 +116,75 @@ class Site {
 
 		$this->isLoaded = true;
 
+	}
+
+	protected function loadDir($dir = '', $defaults=array()) {
+
+		$loaders = array(
+			new DataLoaderIni($this->app),
+		);
+
+		$fullDir = $this->dir . DIRECTORY_SEPARATOR. "data".DIRECTORY_SEPARATOR.$dir;
+		
+		$ourDefaults = array();
+
+		// Pass 1: "index" Files!
+		foreach(scandir($fullDir) as $fileName) {
+			if ($fileName != "." && $fileName != '..' && is_file($fullDir. DIRECTORY_SEPARATOR. $fileName)) {
+				foreach ($loaders as $loader) {
+					if ($loader->isLoadableDefaultDataInSite($this, $fileName, $dir, $defaults)) {
+						$out = $loader->loadDataInSite($this, $fileName, $dir,array_merge($defaults, $ourDefaults));
+						foreach($out->getEvents() as $event) {
+							$this->addEvent($event);
+						}
+						foreach($out->getGroups() as $group) {
+							$this->addGroup($group);
+						}
+						foreach($out->getErrors() as $error) {
+							$this->errors[] = $error;
+						}
+						foreach($out->getWarnings() as $warning) {
+							$this->warnings[] = $warning;
+						}
+						foreach($out->getDefaults() as $item) {
+							$ourDefaults[] = $item;
+						}
+					}
+				}
+			}
+		}
+
+		// TODO do we have a default in this dir that clashes with one further up? eg country?
+
+		// Pass 2: Files that are not "index" files!
+		foreach(scandir($fullDir) as $fileName) {
+			if ($fileName != "." && $fileName != '..' && is_file($fullDir. DIRECTORY_SEPARATOR. $fileName)) {
+				foreach ($loaders as $loader) {
+					if ($loader->isLoadableNonDefaultDataInSite($this, $fileName, $dir, array_merge($defaults, $ourDefaults))) {
+						$out = $loader->loadDataInSite($this, $fileName, $dir,array_merge($defaults, $ourDefaults) );
+						foreach($out->getEvents() as $event) {
+							$this->addEvent($event);
+						}
+						foreach($out->getGroups() as $group) {
+							$this->addGroup($group);
+						}
+						foreach($out->getErrors() as $error) {
+							$this->errors[] = $error;
+						}
+						foreach($out->getWarnings() as $warning) {
+							$this->warnings[] = $warning;
+						}
+					}
+				}
+			}
+		}
+
+		// Pass 3: Dirs!
+		foreach(scandir($fullDir) as $fileName) {
+			if ($fileName != "." && $fileName != '..' && is_dir($fullDir. DIRECTORY_SEPARATOR. $fileName)) {
+				$this->loadDir($dir . DIRECTORY_SEPARATOR. $fileName,  array_merge($defaults, $ourDefaults));
+			}
+		}
 	}
 
 	protected function addEvent(Event $event) {

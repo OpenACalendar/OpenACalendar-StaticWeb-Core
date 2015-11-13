@@ -22,8 +22,11 @@ abstract class BaseDataLoader {
 	}
 
 
-	abstract function  isLoadableDataInSite(Site $site, $filename);
+	abstract function  isLoadableNonDefaultDataInSite(Site $site, $filename);
 
+	abstract function  isLoadableDefaultDataInSite(Site $site, $filename);
+
+	/** @var DataLoadResult **/
 	abstract function loadDataInSite(Site $site, $filename);
 
 }
