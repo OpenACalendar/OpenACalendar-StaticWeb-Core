@@ -16,7 +16,7 @@
 		{%  for country in countries %}
 			<li>
 				<div class="">{{  country.title }}</div>
-				<div class=""><a href="{{ ("/country/" ~ country.code) | internalLinkToDir }}">More</a></div>
+				<div class=""><a href="{{ ("/country/" ~ country.code|upper) | internalLinkToDir }}">More</a></div>
 			</li>
 		{% endfor %}
 	</ul>

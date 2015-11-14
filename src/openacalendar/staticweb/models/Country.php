@@ -23,7 +23,7 @@ class Country
 
 	function __construct($code, $title)
 	{
-		$this->code = strtolower($code);
+		$this->code = strtoupper($code);
 		$this->title = $title;
 	}
 
