@@ -237,3 +237,51 @@ ul.mainListEvents li.event, div.mainShowEvent {
 		}
 	}
 }
+
+
+ul.mainListGroups {
+	li.group {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		border-bottom: 2px solid #E9E9E9;
+	}
+	li.nodata {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListGroups {
+		li.group, li.nodata {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
+
+ul.mainListGroups li.group, div.group {
+	min-height: 50px;
+	padding: 5px 0 20px 0;
+	.title {
+		font-size: 1.1em;
+		font-weight: bold;
+		padding: 2px 0;
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover, a:focus {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+	div.afterGroupListing {
+		clear: both;
+	}
+}
+
+@media screen and (max-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListGroups li.group, div.group {
+		.media {
+			display: none;
+		}
+	}
+}

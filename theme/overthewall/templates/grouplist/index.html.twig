@@ -12,12 +12,12 @@
 
 	<h2>Groups</h2>
 
-	<ul>
-		{%  for group in allGroups %}
-			<li>
-				<div class="">{{  group.title }}</div>
-				<div class="">{{  group.description | nl2br }}</div>
-				<div class=""><a href="{{ ("/group/" ~ group.slug) | internalLinkToDir }}">More</a></div>
+	<ul class="mainListGroups">
+		{% for group in allGroups %}
+			{% include '/common/mainListGroup.html.twig' with {'group':group }  %}
+		{% else %}
+			<li class="nodata">
+				There are no groups.
 			</li>
 		{% endfor %}
 	</ul>
