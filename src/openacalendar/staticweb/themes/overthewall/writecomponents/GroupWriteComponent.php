@@ -1,11 +1,10 @@
 <?php
 
-namespace openacalendar\staticweb\writecomponents;
+namespace openacalendar\staticweb\themes\overthewall\writecomponents;
 
-use openacalendar\staticweb\Site;
-use openacalendar\staticweb\OutFolder;
-use openacalendar\staticweb\TwigHelper;
+
 use openacalendar\staticweb\filters\EventFilter;
+use openacalendar\staticweb\writecomponents\BaseWriteTwigComponent;
 
 
 /**

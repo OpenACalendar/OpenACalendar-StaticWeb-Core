@@ -13,12 +13,11 @@ use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZoneForDefaultCo
 use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
+use openacalendar\staticweb\themes\overthewall\OverTheWallTheme;
 use openacalendar\staticweb\warnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
-use openacalendar\staticweb\filters\EventFilter;
-use openacalendar\staticweb\filters\GroupFilter;
 use Pimple\Container;
 
 /**
@@ -45,6 +44,9 @@ class Site {
 	/** @var  TimeZone */
 	protected $defaultTimeZone;
 
+	/** @var BaseTheme */
+	protected $theme;
+
 	function __construct(Container $app, $dir)
 	{
 		$this->app = $app;
@@ -70,6 +72,8 @@ class Site {
 		if ($this->defaultCountry && $this->defaultTimeZone && !$this->defaultCountry->hasTimeZone($this->defaultTimeZone)) {
 			$this->errors[] = new ConfigErrorInvalidDefaultTimeZoneForDefaultCountry();
 		}
+
+		$this->theme = new OverTheWallTheme($app);
 	}
 
 	/**
@@ -223,48 +227,12 @@ class Site {
 			$this->load();
 		}
 
-		$twigHelper = new TwigHelper($this);
-		$twig = $twigHelper->getTwig();
-
-		$outFolder = new OutFolder($outDir);
-
-		// General Data
-		$data = array(
-			'allEvents'=>$this->events,
-			'allGroups'=>$this->groups,
-			'config'=>$this->config,
-		);
-
-
-		$eventsCurrentOrFutureFilter = new EventFilter($this, $this->app);
-		$eventsCurrentOrFutureFilter->setPresentOrFutureOnly(true);
-		$eventsCurrentOrFuture = $eventsCurrentOrFutureFilter->get();
-
-		// Index
-		$outFolder->addFileContents('','index.html', $twig->render('index.html.twig', array_merge($data, array(
-			'events'=>$eventsCurrentOrFuture,
-		))));
-
-		// Event pages
-		$outFolder->addFileContents('event','index.html',$twig->render('eventlist/index.html.twig', array_merge($data, array(
-			'events'=>$eventsCurrentOrFuture,
-		))));
-
-		$outFolder->addFileContents('event','all.html',$twig->render('eventlist/all.html.twig', array_merge($data, array(
-		))));
-
-		foreach($this->events as $event) {
-			$groupFilter = new GroupFilter($this, $this->app);
-			$groupFilter->setEvent($event);
-			$outFolder->addFileContents('event'.DIRECTORY_SEPARATOR.$event->getSlug(),'index.html',$twig->render('event/index.html.twig', array_merge($data, array(
-				'event'=>$event,
-				'groups'=>$groupFilter->get(),
-			))));
+		if ($this->errors) {
+			throw new \Exception("Site Has Errors");
 		}
 
-		// Group pages
-		$x = new \openacalendar\staticweb\writecomponents\GroupWriteComponent($this->app, $this, $outFolder, $twigHelper);
-		$x->write();
+		$this->theme->write($this, $outDir);
+
 	}
 
 	/**
