@@ -1,6 +1,7 @@
 <?php
 
 namespace openacalendar\staticweb\twig\extensions;
+
 use openacalendar\staticweb\config\Config;
 
 /**
