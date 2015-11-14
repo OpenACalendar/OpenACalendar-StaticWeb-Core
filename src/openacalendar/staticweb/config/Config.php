@@ -27,4 +27,7 @@ class Config {
 
 	public $internalLinkToDirAppendDirectoryIndex = false;
 
+    public $robotsIndex = true;
+    public $robotsFollow = true;
+
 }
