@@ -25,4 +25,6 @@ class Config {
 
 	public $baseURL = '';
 
+	public $internalLinkToDirAppendDirectoryIndex = false;
+
 }

@@ -19,7 +19,7 @@
 				<div class="">{{  event.description | nl2br }}</div>
 				<div class="">{{  event.start | date("F jS \\a\\t g:ia") }}</div>
 				<div class="">{{  event.end | date("F jS \\a\\t g:ia") }}</div>
-				<div class=""><a href="{{ ("/event/" ~ event.slug) | internalLink }}">More</a></div>
+				<div class=""><a href="{{ ("/event/" ~ event.slug) | internalLinkToDir }}">More</a></div>
 			</li>
 		{% endfor %}
 	</ul>
