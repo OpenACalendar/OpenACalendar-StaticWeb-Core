@@ -49,6 +49,16 @@ class DataLoaderIni extends  BaseDataLoader {
 				$event->setSlug($data['event']['slug']);
 			}
 
+            foreach($defaults as $default) {
+                if (is_a($default,'openacalendar\staticweb\models\Group')) {
+                    $event->addGroupSlug($default->getSlug());
+                } else if (is_a($default, 'openacalendar\staticweb\models\Country')) {
+                    $event->setCountry($default);
+                } else if (is_a($default, 'openacalendar\staticweb\models\TimeZone')) {
+                    $event->setTimeZone($default);
+                }
+            }
+
 			$event->setTitle($data['event']['title']);
 
 			$event->setStart($data['event']['start']);
@@ -72,12 +82,6 @@ class DataLoaderIni extends  BaseDataLoader {
 					$out->addError(new DataErrorInvalidTimeZone());
 					return $out;
 				}
-				if (is_a($event->getCountry(),'openacalendar\staticweb\models\Country')) {
-					if (!$event->getCountry()->hasTimeZone($timezone)) {
-						$out->addError(new DataErrorInvalidTimeZoneForCountry());
-						return $out;
-					}
-				}
 				$event->setTimeZone($timezone);
 			}
 
@@ -85,11 +89,12 @@ class DataLoaderIni extends  BaseDataLoader {
 				$event->addGroupSlug($data['event']['group_slug']);
 			}
 
-			foreach($defaults as $default) {
-				if (is_a($default,'openacalendar\staticweb\models\Group')) {
-					$event->addGroupSlug($default->getSlug());
-				}
-			}
+            if (is_a($event->getCountry(),'openacalendar\staticweb\models\Country') && is_a($event->getTimeZone(),'openacalendar\staticweb\models\TimeZone')) {
+                if (!$event->getCountry()->hasTimeZone($event->getTimeZone())) {
+                    $out->addError(new DataErrorInvalidTimeZoneForCountry());
+                    return $out;
+                }
+            }
 
 			$out->addEvent($event);
 		}
@@ -114,7 +119,29 @@ class DataLoaderIni extends  BaseDataLoader {
 			}
 		}
 
-		return $out;
+        if ($isDefault) {
+
+            if (isset($data['country']) && isset($data['country']['code'])) {
+                $country = $this->app['staticdatahelper']->getCountry($data['country']['code']);
+                if (!$country) {
+                    $out->addError(new DataErrorInvalidCountry());
+                    return $out;
+                }
+                $out->addDefault($country);
+            }
+
+            if (isset($data['timezone']) && isset($data['timezone']['timezone'])) {
+                $timezone = $this->app['staticdatahelper']->getTimeZone($data['timezone']['timezone']);
+                if (!$timezone) {
+                    $out->addError(new DataErrorInvalidTimeZone());
+                    return $out;
+                }
+                $out->addDefault($timezone);
+            }
+
+        }
+
+        return $out;
 	}
 
 }
