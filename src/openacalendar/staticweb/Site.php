@@ -10,6 +10,7 @@ use openacalendar\staticweb\data\DataLoaderIni;
 use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultCountry;
 use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZone;
 use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZoneForDefaultCountry;
+use openacalendar\staticweb\errors\ConfigErrorInvalidTheme;
 use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
@@ -71,6 +72,9 @@ class Site {
 		}
 		if ($this->defaultCountry && $this->defaultTimeZone && !$this->defaultCountry->hasTimeZone($this->defaultTimeZone)) {
 			$this->errors[] = new ConfigErrorInvalidDefaultTimeZoneForDefaultCountry();
+		}
+		if (!in_array($this->config->theme, array('overthewall'))) {
+			$this->errors[] = new ConfigErrorInvalidTheme();
 		}
 
 		$this->theme = new OverTheWallTheme($app);
