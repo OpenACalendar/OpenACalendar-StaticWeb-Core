@@ -4,6 +4,8 @@
 namespace openacalendar\staticweb;
 
 use openacalendar\staticweb\twig\extensions\InternalLinkHelper;
+use openacalendar\staticweb\twig\extensions\LinkifyExtension;
+use openacalendar\staticweb\twig\extensions\TruncateExtension;
 use \Twig_Environment;
 use \Twig_Loader_Filesystem;
 
@@ -39,6 +41,8 @@ class TwigHelper
 			'cache' => $this->cacheDir->get(),
 		));
 		$this->twig->addExtension(new InternalLinkHelper($site->getConfig()));
+        $this->twig->addExtension(new LinkifyExtension());
+        $this->twig->addExtension(new TruncateExtension());
 	}
 
 	/**

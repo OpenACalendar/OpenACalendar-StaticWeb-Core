@@ -19,13 +19,12 @@
 	</ul>
 
 
-	<ul>
-		{%  for event in events %}
-			<li>
-				<div class="">{{  event.title }}</div>
-				<div class="">{{  event.start | date("F jS \\a\\t g:ia") }}</div>
-				<div class="">{{  event.end | date("F jS \\a\\t g:ia") }}</div>
-				<div class=""><a href="{{ ("/event/" ~ event.slug) | internalLinkToDir }}">More</a></div>
+	<ul class="mainListEvents">
+		{% for event in events %}
+			{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
+		{% else %}
+			<li class="nodata">
+				There are no upcoming events.
 			</li>
 		{% endfor %}
 	</ul>

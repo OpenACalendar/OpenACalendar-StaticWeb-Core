@@ -113,3 +113,127 @@ h2 {
 	font-size: 1.5em;
 	padding: 10px 0;
 }
+
+
+ul.mainListEvents {
+	li.event {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		border-bottom: 2px solid #E9E9E9;
+	}
+	li.export {
+		text-align: right;
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover, a:focus {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+	li.nodata, li.info {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		font-style: italic;
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListEvents {
+		li.event, li.nodata, li.info {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
+
+ul.mainListEvents li.event, div.mainShowEvent {
+	margin-bottom: 10px;
+	padding: 20px 0;
+	div.dateTimeIcon {
+		float: left;
+		width: 60px;
+		height: 80px;
+		position: relative;
+		z-index: 100;
+		margin: 0 10px 10px 0;
+		border: 2px solid #231f20;
+		.rounded-corners(4px);
+		div.dateIcon {
+			width: 60px;
+			height: 60px;
+			text-align: center;
+			background: #231f20;
+		}
+		div.timeIcon {
+			padding: 1px;
+			text-align: center;
+		}
+		span.deleted, span.cancelled {
+			padding-top: 5px;
+			display: block;
+			color: white;
+		}
+		span.startDay {
+			font-weight: 200;
+			padding-top: 5px;
+			display: block;
+			color: white;
+		}
+		span.startDate {
+			font-size: 16pt;
+			font-weight: 400;
+			display: block;
+			color: white;
+		}
+		span.startMonthYear {
+			font-weight: 200;
+			display: block;
+			font-size: 0.75em;
+			color: white;
+		}
+		span.startTime {
+			font-size: 11pt;
+			color: black;
+		}
+		a {
+			text-decoration: none;
+			span.startDay {
+				color: white;
+			}
+			span.startDate {
+				color: white;
+			}
+			span.startMonthYear {
+				color: white;
+			}
+			span.startTime {
+				color: black;
+			}
+		}
+	}
+	div.title {
+		font-size: 16pt;
+		font-weight: bold;
+		line-height: 1.25em;
+		padding: 2px 0 10px 70px;
+		position: relative;
+		top: -5px;
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover, a:focus {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+	div.afterEventListing {
+		clear: both;
+	}
+}
+
+@media screen and (max-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListEvents li.event, div.mainShowEvent {
+		.media {
+			display: none;
+		}
+	}
+}

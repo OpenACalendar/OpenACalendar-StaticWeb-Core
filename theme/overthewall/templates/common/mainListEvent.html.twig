@@ -1,0 +1,31 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+<li class="event" itemprop="event" itemscope itemtype="http://schema.org/Event">
+	<div class="dateTimeIcon">
+		<time datetime="{{ event.start|date('c') }}" itemprop="startDate">
+			<a href="{{ ("/event/" ~ event.slug) | internalLinkToDir }}">
+				<div class="dateIcon">
+					<span class="startDay">{{ event.start|date('D') }}</span>
+					<span class="startDate">{{ event.start|date('jS') }}</span>
+					<span class="startMonthYear">{{ event.start|date('M \'y') }}</span>
+				</div>
+				<div class="timeIcon">
+					<span class="startTime">{{ event.start|date('g:ia') }}</span>
+				</div>
+			</a>
+		</time>
+	</div>
+	<div class="title" itemprop="name">
+		<a href="{{ ("/event/" ~ event.slug) | internalLinkToDir }}" itemprop="url">
+			{{ event.title}}
+		</a>
+	</div>
+	<p class="description" itemprop="description">{{ event.description |  truncate(1000) | nl2br  | linkify }}</p>
+	<div class="afterEventListing"></div>
+</li>

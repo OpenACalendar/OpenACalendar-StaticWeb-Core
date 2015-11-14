@@ -83,6 +83,10 @@ class OverTheWallTheme extends BaseTheme
             'colourLighter1'=>'#36C036',
             'colourLighter2'=>'#72DA72',
             'colourBackgroundOutsidePage'=>'#B7CFB7',
+            'listDataItemsMarginTopBottom'=>'5px',
+            'listDataItemsMarginLeftRightNarrowScreen'=>'5px',
+            'listDataItemsMarginLeftRightWideScreen'=>'50px',
+            'narrowScreensMakeTwoColumnsIntoOneBoundary'=>'750px',
         ));
         $outFolder->addFileContents(
             'css',
