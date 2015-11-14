@@ -1,0 +1,137 @@
+/**
+ *
+ * @package Core
+ * @link http://ican.openacalendar.org/ OpenACalendar Open Source Software
+ * @license http://ican.openacalendar.org/license.html 3-clause BSD
+ * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ * @author James Baster <james@jarofgreen.co.uk>
+ */
+
+@import("reset.less");
+@import("mixins.less");
+
+html {
+	background-color: @colourBackgroundOutsidePage;
+}
+
+body {
+	padding: 0;
+	margin: 0;
+	font-family: arial, sans-serif;
+	background-color: @colourBackgroundOutsidePage;
+}
+
+#page {
+	max-width: 1200px;
+	margin: 0 auto;
+	background: white;
+}
+
+
+#header {
+	background-color: @colourMain;
+	background-image: -webkit-linear-gradient(top, @colourLighter1, @colourMain); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+	background-image:         linear-gradient(to bottom, @colourLighter1, @colourMain); /* Chrome 26, Firefox 16+, IE 10+, Opera */
+	border-bottom: @colourDarker2 2px solid;
+	padding: 5px;
+	.title {
+		img {
+			max-width: 30px;
+			max-height: 30px;
+		}
+		h1 {
+			color: black;
+			display: inline;
+			font-weight: bold;
+			font-size: 1.6em;
+		}
+		a {
+			text-decoration: none;
+			color: #333;
+			font-size: 14pt;
+			padding: 5px;
+			display:inline-block;
+		}
+		a:hover, a:focus {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+	ul.menu {
+		padding:0;
+		margin: 0;
+		li#NotificationMenu {
+			img.notificationicon {
+				width: 16px;
+				height: 16px;
+			}
+			ul.submenu#NotificationSubMenu {
+				li {
+					padding: 5px;
+					border-bottom: 1px solid #ccc;
+					.title a {
+						display: block;
+						font-size: 10pt;
+						color: #999;
+						padding: 0;
+					}
+					.timesince, .site {
+						display: inline;
+						font-size: 8pt;
+						color: #999;
+						padding: 2px;
+					}
+				}
+				li.unread .title a {
+					font-size: 12pt;
+					color: #333;
+				}
+			}
+		}
+		li {
+			list-style-type: none;
+			display: inline-block;
+			font-size: 1.4em;
+			a {
+				text-decoration: none;
+				color: #333;
+				padding: 5px;
+				display:inline-block;
+			}
+			ul.submenu {
+				padding:0;
+				margin: 0;
+				display:none;
+				position: absolute;
+				background: #FFF;
+				border-bottom: #4d3e04 2px solid;
+				border-left: #4d3e04 2px solid;
+				border-right: #4d3e04 2px solid;
+				z-index: 999;
+				li {
+					list-style-type: none;
+					display: block;
+					a {
+						text-decoration: none;
+						color: #333;
+						font-size: 14pt;
+						padding: 5px;
+						display:inline-block;
+					}
+					a:hover, a:focus {
+						color: black;
+						text-decoration: underline;
+					}
+				}
+			}
+		}
+	}
+	.afterMenu {
+		clear: both;
+	}
+}
+
+#body {
+	min-height: 400px;
+	padding: 5px ;
+}

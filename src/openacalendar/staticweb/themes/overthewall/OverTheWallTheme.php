@@ -74,6 +74,22 @@ class OverTheWallTheme extends BaseTheme
 		$x = new GroupWriteComponent($this->app, $site, $outFolder, $twigHelper);
 		$x->write();
 
+        // CSS
+        $lesscss = $this->app['lesscss'];
+        $lesscss->setVariables(array(
+            'colourMain'=>'#0DA20D',
+            'colourDarker1'=>'#007900',
+            'colourDarker2'=>'#004300',
+            'colourLighter1'=>'#36C036',
+            'colourLighter2'=>'#72DA72',
+            'colourBackgroundOutsidePage'=>'#B7CFB7',
+        ));
+        $outFolder->addFileContents(
+            'css',
+            'main.css',
+            $lesscss->compileFile(APP_ROOT_DIR.'theme'.DIRECTORY_SEPARATOR.'overthewall'.DIRECTORY_SEPARATOR.'css'.DIRECTORY_SEPARATOR.'main.less')
+        );
+
 	}
 
 }

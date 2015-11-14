@@ -6,9 +6,20 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 
-<ul>
-  <li><a href="{{ '/' | internalLinkToDir }}">{{ config.title }}</a></li>
-  <li><a href="{{ '/event/' | internalLinkToDir }}">Events</a></li>
-  <li><a href="{{ '/group/' | internalLinkToDir }}">Groups</a></li>
-  <li><a href="{{ '/country/' | internalLinkToDir }}">Countries</a></li>
+<div class="title">
+	<a href="{{ '/' | internalLinkToDir }}">
+		<h1>{{ config.title }}</h1>
+	</a>
+</div>
+<ul class="menu">
+	<li class="menu">
+		<a href="{{ '/event/' | internalLinkToDir }}">Events</a>
+	</li>
+	<li class="menu">
+		<a href="{{ '/group/' | internalLinkToDir }}">Groups</a>
+	</li>
+	<li class="menu">
+		<a href="{{ '/country/' | internalLinkToDir }}">Countries</a>
+	</li>
 </ul>
+<div class="afterMenu"></div>
