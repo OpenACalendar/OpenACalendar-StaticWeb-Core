@@ -2,6 +2,7 @@
 
 namespace openacalendar\staticweb\filters;
 
+use openacalendar\staticweb\models\Country;
 use openacalendar\staticweb\Site;
 use openacalendar\staticweb\models\Group;
 
@@ -46,6 +47,17 @@ class EventFilter {
       $this->group = $group;
   }
 
+    /** @var Country */
+    protected $country;
+
+    /**
+     * @param Country $country
+     */
+    public function setCountry(Country $country)
+    {
+        $this->country = $country;
+    }
+
   // Processing .....
 
   public function build() {
@@ -71,7 +83,11 @@ class EventFilter {
             $include = false;
           }
         }
-
+        if ($this->country) {
+            if ($event->getCountry()->getCode() != $this->country->getCode()) {
+                $include = false;
+            }
+        }
         if ($include) {
           $this->events[] = $event;
         }

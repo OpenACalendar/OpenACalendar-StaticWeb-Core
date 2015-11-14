@@ -1,0 +1,24 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+{% extends 'page.html.twig' %}
+
+{% block content %}
+
+	<p>Countries</p>
+
+	<ul>
+		{%  for country in countries %}
+			<li>
+				<div class="">{{  country.title }}</div>
+				<div class=""><a href="{{ ("/country/" ~ country.code) | internalLinkToDir }}">More</a></div>
+			</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}
