@@ -15,9 +15,11 @@
 	<li class="menu">
 		<a href="{{ '/event/' | internalLinkToDir }}">Events</a>
 	</li>
-	<li class="menu">
-		<a href="{{ '/group/' | internalLinkToDir }}">Groups</a>
-	</li>
+	{%  if allGroups %}
+		<li class="menu">
+			<a href="{{ '/group/' | internalLinkToDir }}">Groups</a>
+		</li>
+	{%  endif %}
 	<li class="menu">
 		<a href="{{ '/country/' | internalLinkToDir }}">Countries</a>
 	</li>
