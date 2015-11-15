@@ -32,6 +32,8 @@ class Event {
 
 	protected $groupSlugs = array();
 
+    protected $url;
+
 	/**
 	 * @return mixed
 	 */
@@ -156,5 +158,21 @@ class Event {
 	public function getDescription() {
 		return $this->description;
 	}
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param mixed $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
 
 }

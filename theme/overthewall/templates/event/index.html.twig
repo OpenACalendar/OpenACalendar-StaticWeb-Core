@@ -16,6 +16,7 @@
 		<li>
 			<div class="">{{  event.title }}</div>
 			<div class="">{{  event.description | nl2br }}</div>
+			{%  if event.url %}<div class=""><a href="{{  event.url }}">Find out more at {{  event.url }}</a></div>{%  endif %}
 			<div class="">{{  event.start | date("F jS \\a\\t g:ia") }}</div>
 			<div class="">{{  event.end | date("F jS \\a\\t g:ia") }}</div>
 			<div class="">{{  event.country.title }}</div>

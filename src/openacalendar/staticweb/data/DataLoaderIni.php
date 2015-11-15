@@ -68,6 +68,14 @@ class DataLoaderIni extends  BaseDataLoader {
 				$event->setDescription($data['event']['description']);
 			}
 
+            if (isset($data['event']['url']) && $data['event']['url']) {
+                if (filter_var($data['event']['url'], FILTER_VALIDATE_URL)) {
+                    $event->setUrl($data['event']['url']);
+                } else {
+                    // TODO warn!
+                }
+            }
+
 			if (isset($data['event']['country']) && $data['event']['country']) {
 				$country = $this->app['staticdatahelper']->getCountry($data['event']['country']);
 				if (!$country) {
