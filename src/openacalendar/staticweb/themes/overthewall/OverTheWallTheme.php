@@ -7,6 +7,7 @@ use openacalendar\staticweb\filters\GroupFilter;
 use openacalendar\staticweb\OutFolder;
 use openacalendar\staticweb\Site;
 use openacalendar\staticweb\themes\BaseTheme;
+use openacalendar\staticweb\themes\overthewall\writecomponents\AllEventsICalendarComponent;
 use openacalendar\staticweb\themes\overthewall\writecomponents\CountryWriteComponent;
 use openacalendar\staticweb\themes\overthewall\writecomponents\GroupWriteComponent;
 use openacalendar\staticweb\TwigHelper;
@@ -72,6 +73,10 @@ class OverTheWallTheme extends BaseTheme
 
 		// Group pages
 		$x = new GroupWriteComponent($this->app, $site, $outFolder, $twigHelper);
+		$x->write();
+
+		// all ical
+		$x = new AllEventsICalendarComponent($this->app, $site, $outFolder, $twigHelper);
 		$x->write();
 
         // CSS

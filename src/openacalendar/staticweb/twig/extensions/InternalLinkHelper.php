@@ -67,7 +67,7 @@ class InternalLinkHelper  extends \Twig_Extension {
 
 	public function getName()
 	{
-		return 'internallink';
+		return 'openacalendar_internallink';
 	}
 
 }
