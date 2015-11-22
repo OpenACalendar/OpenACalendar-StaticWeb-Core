@@ -1,10 +1,11 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b039896a4084bc5da8aceb415f3c04e8",
+    "hash": "18059ddd7793503ee9c420bffefb2b18",
+    "content-hash": "15e140e119b83e6be8577d2029c63b1d",
     "packages": [
         {
             "name": "eluceo/ical",
@@ -58,6 +59,53 @@
                 "php calendar"
             ],
             "time": "2015-07-12 18:19:30"
+        },
+        {
+            "name": "jmbtechnologylimited/twigextensions",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/JMB-Technology-Limited/Twig-Extensions.git",
+                "reference": "268b8590fb7c21e0463241528a2dd0813e5e7a8e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/JMB-Technology-Limited/Twig-Extensions/zipball/268b8590fb7c21e0463241528a2dd0813e5e7a8e",
+                "reference": "268b8590fb7c21e0463241528a2dd0813e5e7a8e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "twig/twig": "1.23.*"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "JMBTechnologyLimited": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD"
+            ],
+            "authors": [
+                {
+                    "name": "James Baster",
+                    "email": "james@jarofgreen.co.uk",
+                    "homepage": "http://jamesbaster.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Twig Extensions.",
+            "homepage": "https://github.com/JMB-Technology-Limited/Twig-Extensions",
+            "keywords": [
+                "date",
+                "time"
+            ],
+            "time": "2015-11-22 20:58:31"
         },
         {
             "name": "leafo/lessphp",
@@ -211,7 +259,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "jmbtechnologylimited/twigextensions": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

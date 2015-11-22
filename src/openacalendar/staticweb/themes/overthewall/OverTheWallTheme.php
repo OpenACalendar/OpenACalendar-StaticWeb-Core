@@ -92,6 +92,7 @@ class OverTheWallTheme extends BaseTheme
             'listDataItemsMarginLeftRightNarrowScreen'=>'5px',
             'listDataItemsMarginLeftRightWideScreen'=>'50px',
             'narrowScreensMakeTwoColumnsIntoOneBoundary'=>'750px',
+            'narrowScreensMakeEverythingHorizontalIntoVerticalBoundary' => '500px',
         ));
         $outFolder->addFileContents(
             'css',

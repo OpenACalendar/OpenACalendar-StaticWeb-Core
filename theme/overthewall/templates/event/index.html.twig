@@ -10,26 +10,105 @@
 
 {% block innerContent %}
 
-	<ul>
-		<li>
-			<div class="">{{  event.title }}</div>
-			<div class="">{{  event.description | nl2br }}</div>
-			{%  if event.url %}<div class=""><a href="{{  event.url }}">Find out more at {{  event.url }}</a></div>{%  endif %}
-			<div class="">{{  event.start | date("F jS \\a\\t g:ia") }}</div>
-			<div class="">{{  event.end | date("F jS \\a\\t g:ia") }}</div>
-			<div class="">{{  event.country.title }}</div>
-			<div class="">{{  event.timeZone.code }}</div>
-		</li>
-	</ul>
+	<div class="mainShowEvent" itemscope itemtype="http://schema.org/Event">
+		<meta itemprop="name" content="{{ event.title|e('html_attr') }}" />
+
+		<div class="innerPageLeft">
 
 
-  	<ul>
-  		{%  for group in groups %}
-  			<li>
-  				<div class="">Group: {{  group.title }}</div>
-  				<div class=""><a href="{{ ("/group/" ~ group.slug) | internalLinkToDir }}">More</a></div>
-  			</li>
-  		{% endfor %}
-  	</ul>
+			{% if event.isdeleted %}
+				<div class="dateTimeIcon">
+					<div class="dateIcon">
+						<span class="deleted">Deleted!</span>
+					</div>
+				</div>
+			{% elseif event.isCancelled %}
+				<div class="dateTimeIcon">
+					<div class="dateIcon">
+						<span class="cancelled">Cancel<br>-led!</span>
+					</div>
+				</div>
+			{% else %}
+				<div class="dateTimeIcon">
+					<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', event.timeZone.code) }}">
+						<div class="dateIcon">
+							<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', event.timeZone.code) }}</span>
+							<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', event.timeZone.code) }}</span>
+							<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', event.timeZone.code) }}</span>
+						</div>
+						<div class="timeIcon">
+							<span class="startTime">{{ event.getStartAt|tolocaltimeformatted('g:ia', event.timeZone.code) }}</span>
+						</div>
+					</time>
+				</div>
+			{% endif %}
+
+			<p class="description" itemprop="description">
+				{%  if event.description %}
+					{{ event.description | nl2br  | linkify }}
+				{%  else %}
+
+					{% if event.url %}
+						<p>
+							More details: <a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a>
+						</p>
+					{% endif %}
+
+				{%  endif %}
+			</p>
+
+			<div class="dateAndLocationWrapper">
+				{% include 'common/eventFromToLine.html.twig' with {'startAt': event.start, 'endAt': event.end, 'timezone':event.timeZone.code, 'showTimeZone':true} %}
+			</div>
+
+
+		</div>
+
+		<div class="innerPageRight">
+
+			{%  if event.url  %}
+				<div class="infoBoxWrapper">
+					<div class="infoBoxTitle">More Information</div>
+					<div class="infoBoxContent">
+
+						{% if event.url %}
+							<div class="innerPageRightLinkWrapper">
+								<div class="innerPageRightLinkHeader">More details</div>
+								<div class="innerPageRightLinkContent"><a href="{{ event.url }}" target="_blank">{{ event.url | linkinfo }}</a></div>
+							</div>
+						{% endif %}
+
+					</div>
+				</div>
+			{%  endif %}
+
+		</div>
+
+		<div class="afterInnerPageContent"></div>
+
+		{% for displayGroup in groups %}
+			<div class="innerPageLeftRightTitle">
+				<p class="groupTitle">About <a href="{{ ("/group/" ~ group.slug) | internalLinkToDir }}">{{ displayGroup.title }}</a></p>
+			</div>
+			<div class="innerPageLeft">
+				{% if group.description  %}
+					<p class="groupDescription">{{ displayGroup.description | nl2br  | linkify }}</p>
+				{% else %}
+					<p class="groupDescription">We don't know any more about {{ displayGroup.title }}.</p>
+				{% endif %}
+			</div>
+			<div class="innerPageRight">
+				{% if displayGroup.url and displayGroup.url != event.url %}
+					<div class="innerPageRightLinkWrapper">
+						<div class="innerPageRightLinkHeader">More details</div>
+						<div class="innerPageRightLinkContent"><a href="{{ displayGroup.url }}" target="_blank">{{ displayGroup.url | linkinfo }}</a></div>
+					</div>
+				{% endif %}
+			</div>
+			<div class="afterInnerPageContent"></div>
+		{% endfor %}
+
+		<div class="afterEventListing"></div>
+	</div>
 
 {% endblock %}

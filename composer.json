@@ -3,6 +3,7 @@
 		"twig/twig": "1.23.*",
 		"pimple/pimple": "3.0.*",
 		"leafo/lessphp": "0.5.*",
-		"eluceo/ical": "0.8.*"
+		"eluceo/ical": "0.8.*",
+		"jmbtechnologylimited/twigextensions": "dev-master"
 	}
 }

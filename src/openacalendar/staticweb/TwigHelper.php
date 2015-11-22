@@ -41,7 +41,10 @@ class TwigHelper
 			'cache' => $this->cacheDir->get(),
 		));
 		$this->twig->addExtension(new InternalLinkHelper($site->getConfig()));
-        $this->twig->addExtension(new LinkifyExtension());
+        $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension());
+        $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
+        $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LocalTimeExtension());
+        $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkInfoExtension());
         $this->twig->addExtension(new TruncateExtension());
 	}
 
