@@ -8,16 +8,10 @@
 
 {% extends 'country/page.html.twig' %}
 
+{% block tabDetails %}currentTab{% endblock %}
+
 {% block innerContent %}
-
-
-	<ul>
-		<li>
-			<div class="">{{  country.title }}</div>
-		</li>
-	</ul>
-
-
+	
 	<ul class="mainListEvents">
 		{% for event in events %}
 			{% include '/common/mainListEvent.html.twig' with {'event':event }  %}

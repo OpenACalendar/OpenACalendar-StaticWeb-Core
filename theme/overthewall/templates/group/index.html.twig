@@ -8,14 +8,12 @@
 
 {% extends 'group/page.html.twig' %}
 
+{% block tabDetails %}currentTab{% endblock %}
+
 {% block innerContent %}
 
-	<ul>
-		<li>
-			<div class="">{{  group.title }}</div>
-			<div class="">{{  group.description | nl2br }}</div>
-		</li>
-	</ul>
+
+	<p>{{  group.description | nl2br }}</p>
 
 
 	<ul class="mainListEvents">

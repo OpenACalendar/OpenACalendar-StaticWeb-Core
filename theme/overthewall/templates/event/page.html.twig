@@ -14,6 +14,7 @@
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="{{ ("/event/" ~ event.slug) | internalLinkToDir }}">Details</a></li>
 			{% block actions %}{% endblock %}
 		</ul>
 		<div id="innerPage">

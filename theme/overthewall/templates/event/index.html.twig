@@ -8,6 +8,9 @@
 
 {% extends 'event/page.html.twig' %}
 
+
+{% block tabDetails %}currentTab{% endblock %}
+
 {% block innerContent %}
 
 	<div class="mainShowEvent" itemscope itemtype="http://schema.org/Event">
@@ -88,7 +91,7 @@
 
 		{% for displayGroup in groups %}
 			<div class="innerPageLeftRightTitle">
-				<p class="groupTitle">About <a href="{{ ("/group/" ~ group.slug) | internalLinkToDir }}">{{ displayGroup.title }}</a></p>
+				<p class="groupTitle">About <a href="{{ ("/group/" ~ displayGroup.slug) | internalLinkToDir }}">{{ displayGroup.title }}</a></p>
 			</div>
 			<div class="innerPageLeft">
 				{% if group.description  %}
