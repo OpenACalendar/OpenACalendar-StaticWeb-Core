@@ -12,11 +12,10 @@
 
 	<h2>Countries</h2>
 
-	<ul>
+	<ul class="mainListCountries">
 		{%  for country in countries %}
-			<li>
-				<div class="">{{  country.title }}</div>
-				<div class=""><a href="{{ ("/country/" ~ country.code|upper) | internalLinkToDir }}">More</a></div>
+			<li class="country">
+				<div class="title"><a href="{{ ("/country/" ~ country.code|upper) | internalLinkToDir }}">{{  country.title }}</a></div>
 			</li>
 		{% endfor %}
 	</ul>

@@ -285,3 +285,32 @@ ul.mainListGroups li.group, div.group {
 		}
 	}
 }
+
+
+
+ul.mainListCountries {
+	li.country {
+		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
+		border-bottom: 2px solid #E9E9E9;
+		.title {
+			font-size: 1.1em;
+			font-weight: bold;
+			padding: 2px 0;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover, a:focus {
+				color: black;
+				text-decoration: underline;
+			}
+		}
+	}
+}
+@media screen and (min-width: @narrowScreensMakeTwoColumnsIntoOneBoundary) {
+	ul.mainListCountries {
+		li.country {
+			margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightWideScreen;
+		}
+	}
+}
