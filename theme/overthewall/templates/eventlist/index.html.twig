@@ -12,16 +12,25 @@
 
 	<h2>Events</h2>
 
-	<ul class="mainListEvents">
-		{% for event in events %}
-			{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
-		{% else %}
-			<li class="nodata">
-				There are no upcoming events.
-			</li>
-		{% endfor %}
-	</ul>
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+		</ul>
+		<div id="innerPage">
 
-	<p>To see all events (including old ones), <a href="{{ "/event/all.html" | internalLink }}">click here</a></p>
+			<ul class="mainListEvents">
+				{% for event in events %}
+					{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
+				{% else %}
+					<li class="nodata">
+						There are no upcoming events.
+					</li>
+				{% endfor %}
+			</ul>
+
+			<p>To see all events (including old ones), <a href="{{ "/event/all.html" | internalLink }}">click here</a></p>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
 
 {% endblock %}

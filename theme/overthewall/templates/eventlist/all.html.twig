@@ -12,16 +12,25 @@
 
 	<h2>All Events</h2>
 
-	<p>To see current events only, <a href="{{ "/event/" | internalLinkToDir }}">click here</a></p>
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+		</ul>
+		<div id="innerPage">
 
-	<ul class="mainListEvents">
-		{% for event in allEvents %}
-			{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
-		{% else %}
-			<li class="nodata">
-				There are no events.
-			</li>
-		{% endfor %}
-	</ul>
+			<p>To see current events only, <a href="{{ "/event/" | internalLinkToDir }}">click here</a></p>
+
+			<ul class="mainListEvents">
+				{% for event in allEvents %}
+					{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
+				{% else %}
+					<li class="nodata">
+						There are no events.
+					</li>
+				{% endfor %}
+			</ul>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
 
 {% endblock %}

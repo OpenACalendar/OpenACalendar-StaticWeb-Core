@@ -10,18 +10,28 @@
 
 {% block content %}
 
-	<p>Welcome!</p>
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+		</ul>
+		<div id="innerPage">
 
-	<ul class="mainListEvents">
-		{% for event in events %}
-			{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
-		{% else %}
-			<li class="nodata">
-				There are no upcoming events.
-			</li>
-		{% endfor %}
-	</ul>
+			<p>Welcome!</p>
 
-	<a href="{{ '/api1/events.ics' | internalLink }}">ics of all events</a>
+			<ul class="mainListEvents">
+				{% for event in events %}
+					{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
+				{% else %}
+					<li class="nodata">
+						There are no upcoming events.
+					</li>
+				{% endfor %}
+			</ul>
+
+			<a href="{{ '/api1/events.ics' | internalLink }}">ics of all events</a>
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
 
 {% endblock %}

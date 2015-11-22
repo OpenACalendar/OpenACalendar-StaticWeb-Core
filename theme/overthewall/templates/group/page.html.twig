@@ -10,23 +10,19 @@
 
 {% block content %}
 
-	<h2>Countries</h2>
+	<h2>{{  group.title }}</h2>
 
 	<div id="innerPageWrapper">
 		<ul id="innerPageActions">
+			{% block actions %}{% endblock %}
 		</ul>
 		<div id="innerPage">
 
-			<ul class="mainListCountries">
-				{%  for country in countries %}
-					<li class="country">
-						<div class="title"><a href="{{ ("/country/" ~ country.code|upper) | internalLinkToDir }}">{{  country.title }}</a></div>
-					</li>
-				{% endfor %}
-			</ul>
+			{% block innerContent %}{% endblock %}
 
 			<div id="afterInnerPageContent"></div>
 		</div>
 	</div>
+
 
 {% endblock %}

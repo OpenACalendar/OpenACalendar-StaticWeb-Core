@@ -115,6 +115,166 @@ h2 {
 }
 
 
+
+#innerPageWrapper {
+	clear: both;
+	#innerPageActionsShow {
+		padding: 0px 5px;
+		display: block;
+		text-align: right;
+		a {
+			color: #333;
+			text-decoration: none;
+		}
+		a:hover, a:focus {
+			color: black;
+			text-decoration: underline;
+		}
+	}
+	#innerPageActions {
+		padding: 10px 0 6px 0;
+		border-bottom: 1px solid #666;
+		li.action, li.actionWithSubMenu, li.hide {
+			padding: 0px 5px;
+			display: inline;
+			float: right;
+			a {
+				color: #333;
+				text-decoration: none;
+			}
+			a:hover, a:focus {
+				color: black;
+				text-decoration: underline;
+			}
+			@media screen and (max-width: @narrowScreensMakeEverythingHorizontalIntoVerticalBoundary) {
+				display:block;
+				float: none;
+				margin: 15px 0;
+			}
+		}
+		li.hide {
+			text-align: right;
+		}
+		li.actionWithSubMenu ul.submenu {
+			padding:0;
+			margin: 0;
+			display:none;
+			position: absolute;
+			background: #FFF;
+			border-bottom: #4d3e04 2px solid;
+			border-left: #4d3e04 2px solid;
+			border-right: #4d3e04 2px solid;
+			z-index: 999;
+			li {
+				list-style-type: none;
+				display: block;
+				a {
+					text-decoration: none;
+					color: #333;
+					font-size: 12pt;
+					padding: 5px;
+					display:inline-block;
+				}
+				a:hover, a:focus {
+					color: black;
+					text-decoration: underline;
+				}
+			}
+		}
+		li.tab {
+			.rounded-corners-top(3px);
+			display: inline;
+			padding: 5px;
+			margin: 0;
+			border-top: 1px solid #666;
+			border-left: 1px solid #666;
+			border-right: 1px solid #666;
+			background: #f2f2f2;
+			a {
+				color: black;
+				text-decoration: none;
+				@media screen and (max-width: @narrowScreensMakeEverythingHorizontalIntoVerticalBoundary) {
+					display:block;
+				}
+			}
+			a:hover, a:focus {
+				color: blue;
+				text-decoration: underline;
+
+			}
+			@media screen and (max-width: @narrowScreensMakeEverythingHorizontalIntoVerticalBoundary) {
+				display:block;
+				padding: 15px 5px;
+			}
+		}
+		li.currentTab {
+			background: #fff;
+			border-top: 1px solid black;
+			border-left: 1px solid black;
+			border-right: 1px solid black;
+			border-bottom: 1px solid #fff;
+			a, a:hover, a:focus {
+				color: black;
+				text-decoration: none;
+			}
+		}
+	}
+	#innerPage {
+		clear: both;
+		padding: 5px;
+		margin: 2px;
+		.innerPageLeftRightTitle {
+			border-top: 1px solid #ccc;
+			margin-top: 5px;
+			.title {
+				font-weight: bold;
+				font-size: 0.8em;
+				a {
+					color: black;
+					text-decoration: none;
+				}
+				a:hover, a:focus {
+					text-decoration: underline;
+				}
+			}
+		}
+		@media screen and (min-width: 750px) {
+			.innerPageLeft, {
+				width: 57%;
+				float: left;
+			}
+			.innerPageRight {
+				width: 37%;
+				float: right;
+			}
+		}
+		@media screen and (max-width: 750px) {
+			.innerPageLeft.hideIfOneCol, .innerPageRight.hideIfOneCol {
+				display: none;
+			}
+		}
+
+		.afterInnerPageContent {
+			clear: both;
+		}
+		.innerPageRight {
+			.innerPageRightLinkWrapper {
+				padding-bottom: 10px;
+				.innerPageRightLinkHeader {
+					font-size: 0.8em;
+				}
+				.innerPageRightLinkContent {
+					a {
+						font-size: 0.8em;
+					}
+				}
+			}
+		}
+	}
+}
+
+
+
 ul.mainListEvents {
 	li.event {
 		margin: @listDataItemsMarginTopBottom @listDataItemsMarginLeftRightNarrowScreen;
