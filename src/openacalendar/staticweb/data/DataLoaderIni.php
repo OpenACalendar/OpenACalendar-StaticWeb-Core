@@ -121,6 +121,14 @@ class DataLoaderIni extends  BaseDataLoader {
 				$group->setDescription($data['group']['description']);
 			}
 
+            if (isset($data['group']['url']) && $data['group']['url']) {
+                if (filter_var($data['group']['url'], FILTER_VALIDATE_URL)) {
+                    $group->setUrl($data['group']['url']);
+                } else {
+                    // TODO warn!
+                }
+            }
+
 			$out->addGroup($group);
 			if ($isDefault) {
 				$out->addDefault($group);

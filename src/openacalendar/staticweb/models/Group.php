@@ -19,6 +19,8 @@ class Group
 
   protected $description;
 
+    protected $url;
+
 	/**
 	 * @return mixed
 	 */
@@ -63,5 +65,21 @@ class Group
 		return $this->description;
 	}
 
+
+    /**
+     * @return mixed
+     */
+    public function getUrl()
+    {
+        return $this->url;
+    }
+
+    /**
+     * @param mixed $url
+     */
+    public function setUrl($url)
+    {
+        $this->url = $url;
+    }
 
 }
