@@ -11,6 +11,7 @@ use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultCountry;
 use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZone;
 use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZoneForDefaultCountry;
 use openacalendar\staticweb\errors\ConfigErrorInvalidTheme;
+use openacalendar\staticweb\errors\ConfigErrorNotFound;
 use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
@@ -54,14 +55,20 @@ class Site {
 		$this->dir = $dir;
 		$this->config = new Config();
 
+        $anyConfigFound = false;
+
 		foreach(array(
 			New ConfigLoaderIni($this->app),
 				) as $loader) {
 			if ($loader->isLoadableConfigInSite($this)) {
 				$loader->loadConfigInSite($this->config, $this);
+                $anyConfigFound = true;
 			}
 		}
 
+        if (!$anyConfigFound) {
+            $this->errors[] = new ConfigErrorNotFound();
+        }
 		$this->defaultCountry = $this->app['staticdatahelper']->getCountry($this->config->defaultCountry);
 		if (!$this->defaultCountry) {
 			$this->errors[] = new ConfigErrorInvalidDefaultCountry();
@@ -105,6 +112,10 @@ class Site {
 	protected $groups = array();
 
 	function load() {
+
+        if ($this->isLoaded || $this->errors) {
+            return;
+        }
 
 		$this->loadDir();
 
