@@ -20,6 +20,7 @@ use openacalendar\staticweb\warnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
+use openacalendar\staticweb\models\Area;
 use Pimple\Container;
 
 /**
@@ -102,7 +103,7 @@ class Site {
 	{
 		return $this->defaultTimeZone;
 	}
-	
+
 	protected $isLoaded = false;
 
 	protected $errors = array();
@@ -110,6 +111,7 @@ class Site {
 
 	protected $events = array();
 	protected $groups = array();
+    protected $areas = array();
 
 	function load() {
 
@@ -144,7 +146,7 @@ class Site {
 		);
 
 		$fullDir = $this->dir . DIRECTORY_SEPARATOR. "data".DIRECTORY_SEPARATOR.$dir;
-		
+
 		$ourDefaults = array();
 
 		// Pass 1: "index" Files!
@@ -159,6 +161,9 @@ class Site {
 						foreach($out->getGroups() as $group) {
 							$this->addGroup($group);
 						}
+                        foreach($out->getAreas() as $area) {
+                            $this->addArea($area);
+                        }
 						foreach($out->getErrors() as $error) {
 							$this->errors[] = $error;
 						}
@@ -233,6 +238,21 @@ class Site {
 			}
 		}
 		$this->groups[] = $group;
+	}
+
+	protected function addArea(Area $area) {
+        // TODO
+        //if (!$area->getSlug()) {
+		//	$this->warnings[] = new DataWarningGroupHasNoSlug();
+		//	$area->createSlug();
+		//}
+        // TODO
+		//foreach($this->areas as $existingArea) {
+		//	if ($existingArea->getSlug() == $area->getSlug()) {
+		//		$this->errors[] = new DataErrorTwoGroupsHaveSameSlugs();
+		//	}
+		//}
+		$this->areas[] = $area;
 	}
 
 
@@ -316,6 +336,17 @@ class Site {
 			$this->load();
 		}
 		return $this->groups;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAreas()
+	{
+		if (!$this->isLoaded) {
+			$this->load();
+		}
+		return $this->areas;
 	}
 
 }

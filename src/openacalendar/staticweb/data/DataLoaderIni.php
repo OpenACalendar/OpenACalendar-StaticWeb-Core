@@ -155,6 +155,21 @@ class DataLoaderIni extends  BaseDataLoader {
                 $out->addDefault($timezone);
             }
 
+            if (isset($data['area']) && isset($data['area']['slug'])) {
+                $area = new Area();
+                $area->setSlug($data['area']['slug']);
+                $area->setTitle(isset($data['area']['title']) ? $data['area']['title'] : $data['area']['slug']);
+                $area->setCountry($site->getDefaultCountry());
+                foreach($defaults as $default) {
+                    if (is_a($default, 'openacalendar\staticweb\models\Country')) {
+                        $area->setCountry($default);
+                    }
+                }
+                // TODO also have to look for country in $out->defaults
+                $out->addArea($area);
+                $out->addDefault($area);
+            }
+
         }
 
         return $out;

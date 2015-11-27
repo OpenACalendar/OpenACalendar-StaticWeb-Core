@@ -5,6 +5,7 @@ namespace openacalendar\staticweb\data;
 use openacalendar\staticweb\errors\BaseError;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
+use openacalendar\staticweb\models\Area;
 use openacalendar\staticweb\warnings\BaseWarning;
 
 /**
@@ -22,6 +23,8 @@ class DataLoadResult
 
 	protected $groups = array();
 
+    protected $areas = array();
+
 	protected $errors = array();
 
 	protected $warnings = array();
@@ -34,6 +37,10 @@ class DataLoadResult
 
 	public function addGroup(Group $group) {
 		$this->groups[] = $group;
+	}
+
+	public function addArea(Area $area) {
+		$this->areas[] = $area;
 	}
 
 	public function addDefault($item) {
@@ -71,6 +78,15 @@ class DataLoadResult
 	{
 		return $this->groups;
 	}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getAreas()
+	{
+		return $this->areas;
+	}
 
 	/**
 	 * @return array
@@ -91,4 +107,3 @@ class DataLoadResult
 
 
 }
-
