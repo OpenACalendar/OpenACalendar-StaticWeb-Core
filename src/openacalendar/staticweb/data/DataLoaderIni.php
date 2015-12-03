@@ -7,7 +7,7 @@ use openacalendar\staticweb\errors\DataErrorInvalidTimeZone;
 use openacalendar\staticweb\errors\DataErrorInvalidTimeZoneForCountry;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
-use openacalendar\staticweb\models\TimeZone;
+use openacalendar\staticweb\models\DefaultTimeZone;
 use openacalendar\staticweb\repositories\EventRepository;
 use openacalendar\staticweb\repositories\GroupRepository;
 use openacalendar\staticweb\Site;
@@ -88,7 +88,7 @@ class DataLoaderIni extends  BaseDataLoader {
                     $groupsForEvent[] = $default;
                 } else if (is_a($default, 'openacalendar\staticweb\models\Country')) {
                     $event->setCountry($default);
-                } else if (is_a($default, 'openacalendar\staticweb\models\TimeZone')) {
+                } else if (is_a($default, 'openacalendar\staticweb\models\DefaultTimeZone')) {
                     $event->setTimeZone($default->getCode());
                 }
             }
@@ -164,7 +164,7 @@ class DataLoaderIni extends  BaseDataLoader {
             }
 
             if (isset($data['timezone']) && isset($data['timezone']['timezone'])) {
-                $timezone = new TimeZone($data['timezone']['timezone']);
+                $timezone = new DefaultTimeZone($data['timezone']['timezone']);
                 // TODO check exisits!
                 if (!$timezone) {
                     $out->addError(new DataErrorInvalidTimeZone());
