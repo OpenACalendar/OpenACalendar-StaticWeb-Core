@@ -18,23 +18,11 @@ use openacalendar\staticweb\warnings\BaseWarning;
 class DataLoadResult
 {
 
-	protected $events = array();
-
-	protected $groups = array();
-
 	protected $errors = array();
 
 	protected $warnings = array();
 
 	protected $defaults = array();
-
-	public function addEvent(Event $event) {
-		$this->events[] = $event;
-	}
-
-	public function addGroup(Group $group) {
-		$this->groups[] = $group;
-	}
 
 	public function addDefault($item) {
 		$this->defaults[] = $item;
@@ -59,22 +47,6 @@ class DataLoadResult
 	/**
 	 * @return array
 	 */
-	public function getEvents()
-	{
-		return $this->events;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getGroups()
-	{
-		return $this->groups;
-	}
-
-	/**
-	 * @return array
-	 */
 	public function getWarnings()
 	{
 		return $this->warnings;
@@ -91,4 +63,3 @@ class DataLoadResult
 
 
 }
-

@@ -25,5 +25,4 @@ spl_autoload_register('autoload');
 
 $app = new Container();
 $app['timesource'] = new \openacalendar\staticweb\TimeSource();
-$app['staticdatahelper'] = new \openacalendar\staticweb\StaticDataHelper();
-
+$app['lesscss'] = new lessc();

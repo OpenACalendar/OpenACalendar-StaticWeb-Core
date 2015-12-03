@@ -18,7 +18,7 @@
 		<div id="innerPage">
 
 			<ul class="mainListGroups">
-				{% for group in allGroups %}
+				{% for group in groups %}
 					{% include '/common/mainListGroup.html.twig' with {'group':group }  %}
 				{% else %}
 					<li class="nodata">

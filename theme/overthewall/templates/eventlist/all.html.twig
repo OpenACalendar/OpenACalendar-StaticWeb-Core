@@ -20,7 +20,7 @@
 			<p>To see current events only, <a href="{{ "/event/" | internalLinkToDir }}">click here</a></p>
 
 			<ul class="mainListEvents">
-				{% for event in allEvents %}
+				{% for event in events %}
 					{% include '/common/mainListEvent.html.twig' with {'event':event }  %}
 				{% else %}
 					<li class="nodata">

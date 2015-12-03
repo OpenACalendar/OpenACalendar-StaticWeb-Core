@@ -23,16 +23,14 @@ abstract class BaseWriteTwigComponent extends BaseWriteComponent
 
   protected $baseViewParameters;
 
-  public function __construct(Container $app, Site $site, OutFolder $outFolder, TwigHelper $twigHelper) {
-    $this->app = $app;
-    $this->site = $site;
+
+  public function __construct(Container $siteContainer, OutFolder $outFolder, TwigHelper $twigHelper) {
+    $this->siteContainer = $siteContainer;
     $this->outFolder = $outFolder;
     $this->twigHelper = $twigHelper;
 
     $this->baseViewParameters = array(
-      'allEvents'=>$this->site->getEvents(),
-      'allGroups'=>$this->site->getGroups(),
-      'config'=>$this->site->getConfig(),
+      'config'=>$this->siteContainer['site']->getConfig(),
     );
   }
 

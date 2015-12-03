@@ -3,8 +3,8 @@
 namespace openacalendar\staticweb\themes\overthewall\writecomponents;
 
 
-use openacalendar\staticweb\aggregation\EventDistinctValuesAggregation;
-use openacalendar\staticweb\filters\EventFilter;
+use openacalendar\staticweb\repositories\builders\CountryRepositoryBuilder;
+use openacalendar\staticweb\repositories\builders\EventRepositoryBuilder;
 use openacalendar\staticweb\writecomponents\BaseWriteTwigComponent;
 
 
@@ -19,31 +19,34 @@ use openacalendar\staticweb\writecomponents\BaseWriteTwigComponent;
 class CountryWriteComponent extends BaseWriteTwigComponent {
 
 
-	public function write() {
+    public function write() {
 
 
-		$eventPresentOrFutureFilter = new EventFilter($this->site, $this->app);
-		$eventPresentOrFutureFilter->setPresentOrFutureOnly(true);
-		$eventPresentOrFutureAggregation = new EventDistinctValuesAggregation($eventPresentOrFutureFilter);
 
-		$this->outFolder->addFileContents('country','index.html', $this->twigHelper->getTwig()->render('countrylist/index.html.twig', array_merge($this->baseViewParameters, array(
-			'countries'=>$eventPresentOrFutureAggregation->getDistinctCountries(),
-		))));
+        $crbAll = new CountryRepositoryBuilder($this->siteContainer);
 
-		$evenAllFilter = new EventFilter($this->site, $this->app);
-		$eventAllAggregation = new EventDistinctValuesAggregation($evenAllFilter);
-		foreach($eventAllAggregation->getDistinctCountries() as $country) {
-			$groupFilter = new EventFilter($this->site, $this->app);
-			$groupFilter->setCountry($country);
-			$groupFilter->setPresentOrFutureOnly(true);
+        $crbEvents = new CountryRepositoryBuilder($this->siteContainer);
+        $crbEvents->setHasEventsOnly(true);
 
-			$this->outFolder->addFileContents('country'.DIRECTORY_SEPARATOR.strtoupper($country->getCode()),'index.html',$this->twigHelper->getTwig()->render('country/index.html.twig', array_merge($this->baseViewParameters, array(
-				'country'=>$country,
-				'events'=>$groupFilter->get(),
-			))));
-		}
 
-	}
+
+        $this->outFolder->addFileContents('country','index.html', $this->twigHelper->getTwig()->render('countrylist/index.html.twig', array_merge($this->baseViewParameters, array(
+            'countries'=>$crbEvents->fetchAll(),
+        ))));
+
+
+        foreach($crbAll->fetchAll() as $country) {
+            $erb = new EventRepositoryBuilder($this->siteContainer);
+            $erb->setCountry($country);
+            $erb->setAfterNow();
+
+            $this->outFolder->addFileContents('country'.DIRECTORY_SEPARATOR.strtoupper($country->getTwoCharCode()),'index.html',$this->twigHelper->getTwig()->render('country/index.html.twig', array_merge($this->baseViewParameters, array(
+                'country'=>$country,
+                'events'=>$erb->fetchAll(),
+            ))));
+        }
+
+    }
 
 
 }

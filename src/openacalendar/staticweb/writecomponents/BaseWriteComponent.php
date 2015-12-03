@@ -17,21 +17,16 @@ use Pimple\Container;
 */
 abstract class BaseWriteComponent
 {
-
-
   /** @var  Container */
-  protected  $app;
+  protected  $siteContainer;
 
-  /** @var Site **/
-  protected $site;
 
   /** @var OutFolder **/
   protected $outFolder;
 
 
-  public function __construct(Container $app, Site $site, OutFolder $outFolder) {
-    $this->app = $app;
-    $this->site = $site;
+  public function __construct(Container $siteContainer, OutFolder $outFolder) {
+    $this->siteContainer = $siteContainer;
     $this->outFolder = $outFolder;
   }
 

@@ -15,6 +15,9 @@ use openacalendar\staticweb\errors\ConfigErrorNotFound;
 use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
+use openacalendar\staticweb\repositories\CountryRepository;
+use openacalendar\staticweb\repositories\EventRepository;
+use openacalendar\staticweb\repositories\GroupRepository;
 use openacalendar\staticweb\themes\overthewall\OverTheWallTheme;
 use openacalendar\staticweb\warnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningGroupHasNoSlug;
@@ -33,7 +36,7 @@ use Pimple\Container;
 class Site {
 
 	/** @var  Container */
-	protected  $app;
+	protected  $siteContainer;
 
 	protected $dir;
 
@@ -49,16 +52,20 @@ class Site {
 	/** @var BaseTheme */
 	protected $theme;
 
-	function __construct(Container $app, $dir)
-	{
-		$this->app = $app;
-		$this->dir = $dir;
-		$this->config = new Config();
+    function __construct(Container $app, $dir)
+    {
+        // Copy general app container and make a container specifically for this site.
+        $this->siteContainer = new Container();
+        $this->siteContainer['timesource'] = $app['timesource'];
+        $this->siteContainer['lesscss'] = $app['lesscss'];
+        $this->siteContainer['site'] = $this;
+        $this->dir = $dir;
+        $this->config = new Config();
 
         $anyConfigFound = false;
 
 		foreach(array(
-			New ConfigLoaderIni($this->app),
+			New ConfigLoaderIni($this->siteContainer),
 				) as $loader) {
 			if ($loader->isLoadableConfigInSite($this)) {
 				$loader->loadConfigInSite($this->config, $this);
@@ -69,22 +76,34 @@ class Site {
         if (!$anyConfigFound) {
             $this->errors[] = new ConfigErrorNotFound();
         }
-		$this->defaultCountry = $this->app['staticdatahelper']->getCountry($this->config->defaultCountry);
+
+        $this->siteContainer['databasehelper'] = new DataBaseHelper();
+
+        $staticDataHelper = new \openacalendar\staticweb\StaticDataHelper($this->siteContainer);
+        $staticDataHelper->load();
+
+        $this->siteContainer['eventrepository'] = new EventRepository($this->siteContainer);
+        $this->siteContainer['grouprepository'] = new GroupRepository($this->siteContainer);
+        $this->siteContainer['countryrepository'] = new CountryRepository($this->siteContainer);
+
+
+		$this->defaultCountry = $this->siteContainer['countryrepository']->loadByHumanInput($this->config->defaultCountry);
 		if (!$this->defaultCountry) {
 			$this->errors[] = new ConfigErrorInvalidDefaultCountry();
 		}
-		$this->defaultTimeZone = $this->app['staticdatahelper']->getTimeZone($this->config->defaultTimeZone);
-		if (!$this->defaultTimeZone) {
+		$this->defaultTimeZone = $this->config->defaultTimeZone;
+		if (!$this->siteContainer['countryrepository']->isTimeZoneValid($this->defaultTimeZone)) {
 			$this->errors[] = new ConfigErrorInvalidDefaultTimeZone();
-		}
-		if ($this->defaultCountry && $this->defaultTimeZone && !$this->defaultCountry->hasTimeZone($this->defaultTimeZone)) {
-			$this->errors[] = new ConfigErrorInvalidDefaultTimeZoneForDefaultCountry();
-		}
+		} else {
+    		if ($this->defaultCountry  && !$this->defaultCountry->hasTimeZone($this->defaultTimeZone)) {
+    			$this->errors[] = new ConfigErrorInvalidDefaultTimeZoneForDefaultCountry();
+    		}
+        }
 		if (!in_array($this->config->theme, array('overthewall'))) {
 			$this->errors[] = new ConfigErrorInvalidTheme();
 		}
 
-		$this->theme = new OverTheWallTheme($app);
+		$this->theme = new OverTheWallTheme($this->siteContainer);
 	}
 
 	/**
@@ -102,14 +121,11 @@ class Site {
 	{
 		return $this->defaultTimeZone;
 	}
-	
+
 	protected $isLoaded = false;
 
 	protected $errors = array();
 	protected $warnings = array();
-
-	protected $events = array();
-	protected $groups = array();
 
 	function load() {
 
@@ -119,20 +135,6 @@ class Site {
 
 		$this->loadDir();
 
-		usort($this->events, function($a, $b) {
-			if ($a->getStart()->getTimeStamp() == $b->getStart()->getTimeStamp()) {
-				return 0;
-			} else if ($a->getStart()->getTimeStamp() > $b->getStart()->getTimeStamp()) {
-				return 1;
-			} else {
-				return -1;
-			}
-		});
-
-		usort($this->groups, function($a, $b) {
-			return strcasecmp($a->getTitle(), $b->getTitle());
-		});
-
 		$this->isLoaded = true;
 
 	}
@@ -140,25 +142,19 @@ class Site {
 	protected function loadDir($dir = '', $defaults=array()) {
 
 		$loaders = array(
-			new DataLoaderIni($this->app),
+			new DataLoaderIni($this->siteContainer),
 		);
 
 		$fullDir = $this->dir . DIRECTORY_SEPARATOR. "data".DIRECTORY_SEPARATOR.$dir;
-		
+
 		$ourDefaults = array();
 
 		// Pass 1: "index" Files!
 		foreach(scandir($fullDir) as $fileName) {
 			if ($fileName != "." && $fileName != '..' && is_file($fullDir. DIRECTORY_SEPARATOR. $fileName)) {
 				foreach ($loaders as $loader) {
-					if ($loader->isLoadableDefaultDataInSite($this, $fileName, $dir, $defaults)) {
-						$out = $loader->loadDataInSite($this, $fileName, $dir,array_merge($defaults, $ourDefaults));
-						foreach($out->getEvents() as $event) {
-							$this->addEvent($event);
-						}
-						foreach($out->getGroups() as $group) {
-							$this->addGroup($group);
-						}
+					if ($loader->isLoadableDefaultData($fileName, $dir, $defaults)) {
+						$out = $loader->loadData($fileName, $dir,array_merge($defaults, $ourDefaults));
 						foreach($out->getErrors() as $error) {
 							$this->errors[] = $error;
 						}
@@ -179,14 +175,8 @@ class Site {
 		foreach(scandir($fullDir) as $fileName) {
 			if ($fileName != "." && $fileName != '..' && is_file($fullDir. DIRECTORY_SEPARATOR. $fileName)) {
 				foreach ($loaders as $loader) {
-					if ($loader->isLoadableNonDefaultDataInSite($this, $fileName, $dir, array_merge($defaults, $ourDefaults))) {
-						$out = $loader->loadDataInSite($this, $fileName, $dir,array_merge($defaults, $ourDefaults) );
-						foreach($out->getEvents() as $event) {
-							$this->addEvent($event);
-						}
-						foreach($out->getGroups() as $group) {
-							$this->addGroup($group);
-						}
+					if ($loader->isLoadableNonDefaultData($fileName, $dir, array_merge($defaults, $ourDefaults))) {
+						$out = $loader->loadData($fileName, $dir,array_merge($defaults, $ourDefaults) );
 						foreach($out->getErrors() as $error) {
 							$this->errors[] = $error;
 						}
@@ -206,33 +196,29 @@ class Site {
 		}
 	}
 
-	protected function addEvent(Event $event) {
+	public function addEvent(Event $event) {
 		if (!$event->getSlug()) {
 			$this->warnings[] = new DataWarningEventHasNoSlug();
 			$event->createSlug();
 		}
-		foreach($this->events as $existingEvent) {
-			if ($existingEvent->getSlug() == $event->getSlug()) {
-				$this->errors[] = new DataErrorTwoEventsHaveSameSlugs();
-			}
-		}
+        if ($this->siteContainer['eventrepository']->loadBySlug($event->getSlug())) {
+            $this->errors[] = new DataErrorTwoEventsHaveSameSlugs();
+        }
 		if ($event->getStart()->getTimestamp() > $event->getEnd()->getTimestamp()) {
 			$this->errors[] = new DataErrorEndBeforeStart();
 		}
-		$this->events[] = $event;
+		$this->siteContainer['eventrepository']->create($event);
 	}
 
-	protected function addGroup(Group $group) {
+	public function addGroup(Group $group) {
 		if (!$group->getSlug()) {
 			$this->warnings[] = new DataWarningGroupHasNoSlug();
 			$group->createSlug();
 		}
-		foreach($this->groups as $existingGroups) {
-			if ($existingGroups->getSlug() == $group->getSlug()) {
-				$this->errors[] = new DataErrorTwoGroupsHaveSameSlugs();
-			}
-		}
-		$this->groups[] = $group;
+        if ($this->siteContainer['grouprepository']->loadBySlug($group->getSlug())) {
+            $this->errors[] = new DataErrorTwoGroupsHaveSameSlugs();
+        }
+		$this->siteContainer['grouprepository']->create($group);
 	}
 
 
@@ -246,7 +232,7 @@ class Site {
 			throw new \Exception("Site Has Errors");
 		}
 
-		$this->theme->write($this, $outDir);
+		$this->theme->write($outDir);
 
 	}
 
@@ -296,26 +282,5 @@ class Site {
 		return $this->warnings;
 	}
 
-	/**
-	 * @return array
-	 */
-	public function getEvents()
-	{
-		if (!$this->isLoaded) {
-			$this->load();
-		}
-		return $this->events;
-	}
-
-	/**
-	 * @return array
-	 */
-	public function getGroups()
-	{
-		if (!$this->isLoaded) {
-			$this->load();
-		}
-		return $this->groups;
-	}
 
 }

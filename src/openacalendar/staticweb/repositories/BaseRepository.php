@@ -1,8 +1,6 @@
 <?php
 
-namespace openacalendar\staticweb\themes;
-
-use openacalendar\staticweb\Site;
+namespace openacalendar\staticweb\repositories;
 
 
 /**
@@ -13,8 +11,9 @@ use openacalendar\staticweb\Site;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-abstract class BaseTheme
+abstract class BaseRepository
 {
+
 
     protected $siteContainer;
 
@@ -24,6 +23,6 @@ abstract class BaseTheme
     }
 
 
-	abstract function write($dir);
+
 
 }

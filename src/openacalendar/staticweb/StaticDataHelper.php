@@ -17,71 +17,51 @@ use openacalendar\staticweb\models\Country;
  */
 class StaticDataHelper {
 
-	protected $countries;
+    protected $siteContainer;
 
-	protected $timeZones;
-
-	protected function load() {
-
-		$this->countries = array();
-
-		foreach(explode("\n", file_get_contents(APP_ROOT_DIR.'/staticdata/iso3166.tab')) as $line) {
-			if ($line && substr($line, 0,1) != '#') {
-				$bits = explode("\t", $line) ;
-				$this->countries[strtolower($bits[0])] = new Country($bits[0], $bits[1]);
-			}
-		}
-
-		$this->timeZones = array();
-
-		foreach(explode("\n", file_get_contents(APP_ROOT_DIR.'/staticdata/zone.tab')) as $line) {
-			if ($line && substr($line, 0,1) != '#') {
-				$bits = explode("\t", $line);
-
-				if (!isset($this->timeZones[strtolower($bits[2])])) {
-					$this->timeZones[strtolower($bits[2])] = new TimeZone($bits[2]);
-				}
-
-				$this->countries[strtolower($bits[0])]->addTimeZone($this->timeZones[strtolower($bits[2])]);
-			}
-		}
+    function __construct($siteContainer)
+    {
+        $this->siteContainer = $siteContainer;
+    }
 
 
-	}
+    public function load()
+    {
 
-	public function getCountries() {
-		if (!$this->countries) {
-			$this->load();
-		}
-		return array_values($this->countries);
-	}
+        $countries = array();
 
-	public function getTimeZones() {
-		if (!$this->timeZones) {
-			$this->load();
-		}
-		return array_values($this->timeZones);
-	}
+        # Step - Load Countries
+        foreach(explode("\n", file_get_contents(APP_ROOT_DIR.'/staticdata/iso3166.tab')) as $line) {
+            if ($line && substr($line, 0,1) != '#') {
+                $bits = explode("\t", $line) ;
+                $countries[strtoupper($bits[0])] = array(
+                    'Title'=>$bits[1],
+                    'TimeZones'=>array(),
+                );
 
-	public function getCountry($value) {
-		if (!$this->countries) {
-			$this->load();
-		}
-		if (isset($this->countries[strtolower($value)])) {
-			return $this->countries[strtolower($value)];
-		}
-		return null;
-	}
+            }
+        }
 
-	public function getTimeZone($value) {
-		if (!$this->timeZones) {
-			$this->load();
-		}
-		if (isset($this->timeZones[strtolower($value)])) {
-			return $this->timeZones[strtolower($value)];
-		}
-		return null;
-	}
+        # Step - Load Timezones
+        foreach(explode("\n", file_get_contents(APP_ROOT_DIR.'/staticdata/zone.tab')) as $line) {
+            if ($line && substr($line, 0,1) != '#') {
+                $bits = explode("\t", $line);
+                $countries[strtoupper($bits[0])]['TimeZones'][] = $bits[2];
+            }
+        }
+
+        # Step - Save to DB
+        $statInsert = $this->siteContainer['databasehelper']->getPDO()->prepare("INSERT INTO country (two_char_code,title,timezones) ".
+            "VALUES (:two_char_code,:title,:timezones)");
+        foreach($countries as $code=>$countryData) {
+            $statInsert->execute(array(
+                'two_char_code'=>  strtoupper($code),
+                'timezones'=>implode(",",$countryData['TimeZones']),
+                'title'=>$countryData['Title'],
+            ));
+        }
+
+    }
 
 }
 

@@ -13,57 +13,85 @@ namespace openacalendar\staticweb\models;
 class Group
 {
 
-	protected $slug;
+    protected $id;
 
-	protected $title;
+    protected $slug;
 
-  protected $description;
+    protected $title;
+
+    protected $description;
 
     protected $url;
 
-	/**
-	 * @return mixed
-	 */
-	public function getSlug()
-	{
-		return $this->slug;
-	}
 
-	/**
-	 * @param mixed $slug
-	 */
-	public function setSlug($slug)
-	{
-		$this->slug = $slug;
-	}
+    public function setFromDataBaseRow($data) {
+        $this->id = $data['id'];
+        $this->slug = $data['slug'];
+        $this->title = $data['title'];
+        $this->description = $data['description'];
+        $this->url = $data['url'];
+    }
 
-	public function createSlug() {
-		$this->slug = "noslug"; // TODO better - base on title
-	}
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	}
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
 
-	/**
-	 * @param mixed $title
-	 */
-	public function setTitle($title)
-	{
-		$this->title = $title;
-	}
 
-	public function setDescription($description) {
-		$this->description = $description;
-	}
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
 
-	public function getDescription() {
-		return $this->description;
-	}
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+    }
+
+    public function createSlug() {
+        $this->slug = "noslug"; // TODO better - base on title
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    /**
+     * @param mixed $title
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    }
+
+    public function setDescription($description) {
+        $this->description = $description;
+    }
+
+    public function getDescription() {
+        return $this->description;
+    }
 
 
     /**

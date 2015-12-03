@@ -15,55 +15,49 @@ use openacalendar\staticweb\config\Config;
 class Country
 {
 
-	protected $code;
+    protected $code;
 
-	protected $title;
+    protected $title;
 
-	protected $timeZones = array();
+    protected $timeZones = array();
 
-	function __construct($code, $title)
-	{
-		$this->code = strtoupper($code);
-		$this->title = $title;
-	}
+    public function setFromDataBaseRow($data) {
+        $this->id = $data['id'];
+        $this->title = $data['title'];
+        $this->two_char_code = $data['two_char_code'];
+        $this->timezones = $data['timezones'];
+    }
 
-	public function addTimeZone(TimeZone $timeZone) {
-		$this->timeZones[] = $timeZone;
-	}
 
-	/**
-	 * @return mixed
-	 */
-	public function getCode()
-	{
-		return $this->code;
-	}
+    public function getId() {
+        return $this->id;
+    }
+    public function setId($id) {
+        $this->id = $id;
+    }
+    public function getTitle() {
+        return $this->title;
+    }
+    public function getTwoCharCode() {
+        return $this->two_char_code;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getTimeZones()
-	{
-		return $this->timeZones;
-	}
+    public function getTimezones() {
+        return $this->timezones;
+    }
 
-	/**
-	 * @return mixed
-	 */
-	public function getTitle()
-	{
-		return $this->title;
-	}
+    public function getTimezonesAsList() {
+        return explode(",", $this->timezones);
+    }
 
-	public function hasTimeZone(TimeZone $timeZone) {
-		foreach($this->timeZones as $ourTimeZone) {
-			if($ourTimeZone->getCode() == $timeZone->getCode()) {
-				return true;
-			}
-		}
-		return false;
-	}
-
+    public function hasTimeZone($timeZone) {
+        foreach(explode(",", $this->timezones) as $hasTimeZone) {
+            if (strtolower($hasTimeZone) == strtolower($timeZone)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 }
 

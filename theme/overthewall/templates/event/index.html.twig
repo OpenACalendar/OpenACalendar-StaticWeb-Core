@@ -33,14 +33,14 @@
 				</div>
 			{% else %}
 				<div class="dateTimeIcon">
-					<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', event.timeZone.code) }}">
+					<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', event.timeZone) }}">
 						<div class="dateIcon">
-							<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', event.timeZone.code) }}</span>
-							<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', event.timeZone.code) }}</span>
-							<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', event.timeZone.code) }}</span>
+							<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', event.timeZone) }}</span>
+							<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', event.timeZone) }}</span>
+							<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', event.timeZone) }}</span>
 						</div>
 						<div class="timeIcon">
-							<span class="startTime">{{ event.getStartAt|tolocaltimeformatted('g:ia', event.timeZone.code) }}</span>
+							<span class="startTime">{{ event.getStartAt|tolocaltimeformatted('g:ia', event.timeZone) }}</span>
 						</div>
 					</time>
 				</div>
@@ -61,7 +61,7 @@
 			</p>
 
 			<div class="dateAndLocationWrapper">
-				{% include 'common/eventFromToLine.html.twig' with {'startAt': event.start, 'endAt': event.end, 'timezone':event.timeZone.code, 'showTimeZone':true} %}
+				{% include 'common/eventFromToLine.html.twig' with {'startAt': event.start, 'endAt': event.end, 'timezone':event.timeZone, 'showTimeZone':true} %}
 			</div>
 
 

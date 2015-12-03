@@ -3,8 +3,7 @@
 namespace openacalendar\staticweb\themes\overthewall\writecomponents;
 
 
-use openacalendar\staticweb\aggregation\EventDistinctValuesAggregation;
-use openacalendar\staticweb\filters\EventFilter;
+use openacalendar\staticweb\repositories\builders\EventRepositoryBuilder;
 use openacalendar\staticweb\writecomponents\BaseWriteTwigComponent;
 
 
@@ -25,7 +24,9 @@ class AllEventsICalendarComponent extends BaseWriteTwigComponent
         $vCalendar = new \Eluceo\iCal\Component\Calendar('www.example.com');
 
 
-        foreach($this->site->getEvents() as $event) {
+        $erb = new EventRepositoryBuilder($this->siteContainer);
+        // TODO up to one month old!
+        foreach($erb->fetchAll() as $event) {
             $vEvent = new \Eluceo\iCal\Component\Event();
             $vEvent
                 ->setDtStart($event->getStart())

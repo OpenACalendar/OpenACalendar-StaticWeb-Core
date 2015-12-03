@@ -3,6 +3,7 @@
 namespace openacalendar\staticweb\data;
 
 use openacalendar\staticweb\Site;
+use openacalendar\staticweb\DataBaseHelper;
 
 /**
  *
@@ -14,19 +15,20 @@ use openacalendar\staticweb\Site;
  */
 abstract class BaseDataLoader {
 
-	protected $app;
+	protected $siteContainer;
 
-	function __construct($app)
+
+	function __construct($siteContainer)
 	{
-		$this->app = $app;
+		$this->siteContainer = $siteContainer;
 	}
 
 
-	abstract function  isLoadableNonDefaultDataInSite(Site $site, $filename);
+	abstract function  isLoadableNonDefaultData($filename, $folder='', $defaults=array());
 
-	abstract function  isLoadableDefaultDataInSite(Site $site, $filename);
+	abstract function  isLoadableDefaultData($filename, $folder='', $defaults=array());
 
 	/** @var DataLoadResult **/
-	abstract function loadDataInSite(Site $site, $filename);
+	abstract function loadData($filename, $folder='', $defaults=array());
 
 }
