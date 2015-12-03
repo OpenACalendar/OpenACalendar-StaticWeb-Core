@@ -17,8 +17,12 @@ class DataBaseHelper
     protected $pdo;
 
     protected function createNewDataBase() {
-        $tempfilename = tempnam(sys_get_temp_dir(), 'openacalendarstaticwebdb');
-        $this->pdo = new \PDO("sqlite:".$tempfilename);
+        if (false) {
+            $tempfilename = tempnam(sys_get_temp_dir(), 'openacalendarstaticwebdb');
+            $this->pdo = new \PDO("sqlite:" . $tempfilename);
+        } else {
+            $this->pdo = new \PDO("sqlite::memory:");
+        }
         $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
 
         $contents = file_get_contents(APP_ROOT_DIR.DIRECTORY_SEPARATOR.'sql'.DIRECTORY_SEPARATOR.'create.sql');

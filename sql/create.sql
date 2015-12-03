@@ -1,3 +1,8 @@
+DROP TABLE IF EXISTS event_in_group;
+DROP TABLE IF EXISTS group_information;
+DROP TABLE IF EXISTS event_information;
+DROP TABLE IF EXISTS country;
+
 CREATE TABLE country (
 	id INTEGER PRIMARY KEY NOT NULL,
 	two_char_code VARCHAR(2) NOT NULL,
