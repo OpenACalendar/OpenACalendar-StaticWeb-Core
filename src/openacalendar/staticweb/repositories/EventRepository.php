@@ -21,9 +21,9 @@ class EventRepository extends BaseRepository
             " WHERE event_information.slug =:slug ");
         $stat->execute(array( 'slug'=> $slug));
         if ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $group = new Event();
-            $group->setFromDataBaseRow($data);
-            return $group;
+            $event = new Event();
+            $event->setFromDataBaseRow($data);
+            return $event;
         }
     }
 
