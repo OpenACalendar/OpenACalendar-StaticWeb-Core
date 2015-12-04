@@ -45,12 +45,15 @@ class OverTheWallTheme extends BaseTheme
         $erb->setAfterNow();
         $erb->fetchAll();
 
+        $this->siteContainer['log']->info('Writing Index pages');
+
 		// Index
 		$outFolder->addFileContents('','index.html', $twig->render('index.html.twig', array_merge($data, array(
 			'events'=>$erb->fetchAll(),
 		))));
 
         // Event pages
+        $this->siteContainer['log']->info('Writing Event pages');
 		$outFolder->addFileContents('event','index.html',$twig->render('eventlist/index.html.twig', array_merge($data, array(
 			'events'=>$erb->fetchAll(),
 		))));
@@ -72,18 +75,22 @@ class OverTheWallTheme extends BaseTheme
 		}
 
 		// Country pages
+        $this->siteContainer['log']->info('Writing Country pages');
 		$x = new CountryWriteComponent($this->siteContainer, $outFolder, $twigHelper);
 		$x->write();
 
 		// Group pages
+        $this->siteContainer['log']->info('Writing Group pages');
 		$x = new GroupWriteComponent($this->siteContainer, $outFolder, $twigHelper);
 		$x->write();
 
 		// Area pages
+        $this->siteContainer['log']->info('Writing Area pages');
 		$x = new AreaWriteComponent($this->siteContainer, $outFolder, $twigHelper);
 		$x->write();
 
 		// all ical
+        $this->siteContainer['log']->info('Writing iCalendar API pages');
 		$x = new AllEventsICalendarComponent($this->siteContainer, $outFolder, $twigHelper);
 		$x->write();
 

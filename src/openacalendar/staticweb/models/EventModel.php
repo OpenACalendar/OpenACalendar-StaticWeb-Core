@@ -246,4 +246,11 @@ class EventModel {
         $this->url = $url;
     }
 
+
+    public function getDataForLoggerInfo() {
+        return array(
+            'slug' => $this->slug,
+            'summary' => $this->title,
+        );
+    }
 }

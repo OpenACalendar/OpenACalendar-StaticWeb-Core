@@ -62,24 +62,39 @@ class Site {
         $this->siteContainer = new Container();
         $this->siteContainer['timesource'] = $app['timesource'];
         $this->siteContainer['lesscss'] = $app['lesscss'];
+        $this->siteContainer['log'] = $app['log'];
         $this->siteContainer['site'] = $this;
         $this->dir = $dir;
-        $this->config = new Config();
 
+        $this->siteContainer['log']->notice("Constructing site from directory", array('dir'=>$dir));
+
+        $this->constructConfig();
+        $this->constructEnv();
+
+	}
+
+    protected function constructConfig() {
+        $this->siteContainer['log']->info("Starting to load config");
+
+        $this->config = new Config();
         $anyConfigFound = false;
 
-		foreach(array(
-			New ConfigLoaderIni($this->siteContainer),
-				) as $loader) {
-			if ($loader->isLoadableConfigInSite($this)) {
-				$loader->loadConfigInSite($this->config, $this);
+        foreach(array(
+                    New ConfigLoaderIni($this->siteContainer),
+                ) as $loader) {
+            if ($loader->isLoadableConfigInSite($this)) {
+                $loader->loadConfigInSite($this->config, $this);
                 $anyConfigFound = true;
-			}
-		}
+            }
+        }
 
         if (!$anyConfigFound) {
             $this->errors[] = new ConfigErrorNotFound();
         }
+    }
+
+    protected function constructEnv() {
+        $this->siteContainer['log']->info("Starting to construct environment");
 
         $this->siteContainer['databasehelper'] = new DataBaseHelper();
 
@@ -91,24 +106,25 @@ class Site {
         $this->siteContainer['countryrepository'] = new CountryRepository($this->siteContainer);
         $this->siteContainer['arearepository'] = new AreaRepository($this->siteContainer);
 
-		$this->defaultCountry = $this->siteContainer['countryrepository']->loadByHumanInput($this->config->defaultCountry);
-		if (!$this->defaultCountry) {
-			$this->errors[] = new ConfigErrorInvalidDefaultCountry();
-		}
-		$this->defaultTimeZone = $this->config->defaultTimeZone;
-		if (!$this->siteContainer['countryrepository']->isTimeZoneValid($this->defaultTimeZone)) {
-			$this->errors[] = new ConfigErrorInvalidDefaultTimeZone();
-		} else {
-    		if ($this->defaultCountry  && !$this->defaultCountry->hasTimeZone($this->defaultTimeZone)) {
-    			$this->errors[] = new ConfigErrorInvalidDefaultTimeZoneForDefaultCountry();
-    		}
+        $this->defaultCountry = $this->siteContainer['countryrepository']->loadByHumanInput($this->config->defaultCountry);
+        if (!$this->defaultCountry) {
+            $this->errors[] = new ConfigErrorInvalidDefaultCountry();
         }
-		if (!in_array($this->config->theme, array('overthewall'))) {
-			$this->errors[] = new ConfigErrorInvalidTheme();
-		}
+        $this->defaultTimeZone = $this->config->defaultTimeZone;
+        if (!$this->siteContainer['countryrepository']->isTimeZoneValid($this->defaultTimeZone)) {
+            $this->errors[] = new ConfigErrorInvalidDefaultTimeZone();
+        } else {
+            if ($this->defaultCountry  && !$this->defaultCountry->hasTimeZone($this->defaultTimeZone)) {
+                $this->errors[] = new ConfigErrorInvalidDefaultTimeZoneForDefaultCountry();
+            }
+        }
+        if (!in_array($this->config->theme, array('overthewall'))) {
+            $this->errors[] = new ConfigErrorInvalidTheme();
+        }
 
-		$this->theme = new OverTheWallTheme($this->siteContainer);
-	}
+        $this->theme = new OverTheWallTheme($this->siteContainer);
+    }
+
 
 	/**
 	 * @return Country
@@ -137,9 +153,13 @@ class Site {
             return;
         }
 
+        $this->siteContainer['log']->notice("Starting loading");
+
 		$this->loadDir();
 
 		$this->isLoaded = true;
+
+        $this->siteContainer['log']->notice("Finished loading");
 
 	}
 
@@ -211,6 +231,7 @@ class Site {
 		if ($event->getStart()->getTimestamp() > $event->getEnd()->getTimestamp()) {
 			$this->errors[] = new DataErrorEndBeforeStart();
 		}
+        $this->siteContainer['log']->info("Adding event", array('event'=>$event->getDataForLoggerInfo()));
 		$this->siteContainer['eventrepository']->create($event);
 	}
 
@@ -222,6 +243,7 @@ class Site {
         if ($this->siteContainer['grouprepository']->loadBySlug($group->getSlug())) {
             $this->errors[] = new DataErrorTwoGroupsHaveSameSlugs();
         }
+        $this->siteContainer['log']->info("Adding group", array('group'=>$group->getDataForLoggerInfo()));
 		$this->siteContainer['grouprepository']->create($group);
 	}
 
@@ -233,6 +255,7 @@ class Site {
         if ($this->siteContainer['arearepository']->loadBySlug($area->getSlug())) {
             $this->errors[] = new DataErrorTwoAreasHaveSameSlugs();
         }
+        $this->siteContainer['log']->info("Adding area", array('area'=>$area->getDataForLoggerInfo()));
         $this->siteContainer['arearepository']->create($area);
     }
 
@@ -247,8 +270,11 @@ class Site {
 			throw new \Exception("Site Has Errors");
 		}
 
+        $this->siteContainer['log']->notice("Starting writing", array('dir'=>$outDir));
+
 		$this->theme->write($outDir);
 
+        $this->siteContainer['log']->notice("Finished writing");
 	}
 
 	/**

@@ -38,6 +38,8 @@ class DataLoaderIni extends  BaseDataLoader {
 
 		$isDefault = ($filename == 'data.ini');
 
+        $this->siteContainer['log']->debug('Starting DataLoader Ini', array('filename'=>$filename,'folder'=>$folder,'isDefault'=>$isDefault));
+
 		$data = parse_ini_file($this->siteContainer['site']->getDir().DIRECTORY_SEPARATOR.'data'.DIRECTORY_SEPARATOR.$folder.DIRECTORY_SEPARATOR.$filename, true);
 
 		$out = new DataLoadResult();
@@ -193,6 +195,8 @@ class DataLoaderIni extends  BaseDataLoader {
             }
 
         }
+
+        $this->siteContainer['log']->debug('Finished DataLoader Ini');
 
         return $out;
 	}

@@ -26,3 +26,4 @@ spl_autoload_register('autoload');
 $app = new Container();
 $app['timesource'] = new \openacalendar\staticweb\TimeSource();
 $app['lesscss'] = new lessc();
+$app['log'] = new Monolog\Logger('app');

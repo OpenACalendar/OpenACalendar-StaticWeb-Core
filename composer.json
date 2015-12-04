@@ -4,6 +4,7 @@
 		"pimple/pimple": "3.0.*",
 		"leafo/lessphp": "0.5.*",
 		"eluceo/ical": "0.8.*",
+		"monolog/monolog": "1.17.*",
 		"jmbtechnologylimited/twigextensions": "dev-master"
 	}
 }

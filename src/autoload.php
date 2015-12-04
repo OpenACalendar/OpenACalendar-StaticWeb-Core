@@ -25,4 +25,9 @@ $app = new Container();
 
 $app['timesource'] = new \openacalendar\staticweb\TimeSource();
 $app['lesscss'] = new lessc();
+$app['log'] = new Monolog\Logger('app');
+$app['log']->pushProcessor(function ($record) {
+    $record['extra']['memory_used'] = memory_get_usage();
+    return $record;
+});
 

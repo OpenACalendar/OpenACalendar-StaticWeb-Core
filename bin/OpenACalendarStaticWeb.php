@@ -13,13 +13,30 @@ require __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'src'.DIRECTORY_SEP
 
 
 
-$opts = getopt('',array('help','build','out:','site:','baseurl:'));
+$opts = getopt('',array('help','build','out:','site:','baseurl:','log:'));
 
 
 if (isset($opts['help'])) {
 	print "HELP PAGE\n";
 	die();
 }
+
+$log = strtolower(trim($opts['log']));
+if ($log == 'none') {
+    $app['log']->pushHandler(new Monolog\Handler\NullHandler());
+} else if ($log == 'debug') {
+    $app['log']->pushHandler(new Monolog\Handler\StreamHandler('php://stdout', Monolog\Logger::DEBUG));
+} else if ($log == 'info') {
+    $app['log']->pushHandler(new Monolog\Handler\StreamHandler('php://stdout', Monolog\Logger::INFO));
+} else if ($log == 'warning') {
+    $app['log']->pushHandler(new Monolog\Handler\StreamHandler('php://stdout', Monolog\Logger::WARNING));
+} else if ($log == 'error') {
+    $app['log']->pushHandler(new Monolog\Handler\StreamHandler('php://stdout', Monolog\Logger::ERROR));
+} else {
+    // this is the default level
+    $app['log']->pushHandler(new Monolog\Handler\StreamHandler('php://stdout', Monolog\Logger::NOTICE));
+}
+
 
 function setConfig(\openacalendar\staticweb\Site $site, $opts) {
 	if (isset($opts['baseurl']) && $opts['baseurl']) {

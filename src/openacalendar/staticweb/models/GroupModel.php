@@ -110,4 +110,11 @@ class GroupModel
         $this->url = $url;
     }
 
+
+    public function getDataForLoggerInfo() {
+        return array(
+            'slug' => $this->slug,
+            'title' => $this->title,
+        );
+    }
 }
