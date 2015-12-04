@@ -3,7 +3,7 @@
 namespace openacalendar\staticweb\repositories;
 
 
-use openacalendar\staticweb\models\Country;
+use openacalendar\staticweb\models\CountryModel;
 
 /**
  *
@@ -33,7 +33,7 @@ class CountryRepository extends BaseRepository
             " WHERE country.two_char_code =:code ");
         $stat->execute(array( 'code'=> strtoupper($code)));
         if ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $country = new Country();
+            $country = new CountryModel();
             $country->setFromDataBaseRow($data);
             return $country;
         }
@@ -44,7 +44,7 @@ class CountryRepository extends BaseRepository
             " WHERE country.id =:id ");
         $stat->execute(array( 'id'=>$id));
         if ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $country = new Country();
+            $country = new CountryModel();
             $country->setFromDataBaseRow($data);
             return $country;
         }
@@ -55,7 +55,7 @@ class CountryRepository extends BaseRepository
             " WHERE country.title = :title ");
         $stat->execute(array( 'title'=>$title));
         if ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $country = new Country();
+            $country = new CountryModel();
             $country->setFromDataBaseRow($data);
             return $country;
         }
@@ -65,7 +65,7 @@ class CountryRepository extends BaseRepository
         $stat = $this->siteContainer['databasehelper']->getPDO()->prepare("SELECT country.* FROM country ");
         $stat->execute();
         while ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $country = new Country();
+            $country = new CountryModel();
             $country->setFromDataBaseRow($data);
             if ($country->hasTimeZone($timeZone)) {
                 return true;

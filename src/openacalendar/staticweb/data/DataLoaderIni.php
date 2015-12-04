@@ -5,10 +5,10 @@ namespace openacalendar\staticweb\data;
 use openacalendar\staticweb\errors\DataErrorInvalidCountry;
 use openacalendar\staticweb\errors\DataErrorInvalidTimeZone;
 use openacalendar\staticweb\errors\DataErrorInvalidTimeZoneForCountry;
-use openacalendar\staticweb\models\Area;
-use openacalendar\staticweb\models\Event;
-use openacalendar\staticweb\models\Group;
-use openacalendar\staticweb\models\DefaultTimeZone;
+use openacalendar\staticweb\models\AreaModel;
+use openacalendar\staticweb\models\EventModel;
+use openacalendar\staticweb\models\GroupModel;
+use openacalendar\staticweb\models\DefaultTimeZoneModel;
 use openacalendar\staticweb\repositories\EventRepository;
 use openacalendar\staticweb\repositories\GroupRepository;
 use openacalendar\staticweb\Site;
@@ -46,7 +46,7 @@ class DataLoaderIni extends  BaseDataLoader {
 
         if (isset($data['group'])) {
 
-            $group = new Group();
+            $group = new GroupModel();
 
             if (isset($data['group']['slug']) && $data['group']['slug']) {
                 $group->setSlug($data['group']['slug']);
@@ -74,7 +74,7 @@ class DataLoaderIni extends  BaseDataLoader {
 
         if (isset($data['event'])) {
 
-			$event = new Event();
+			$event = new EventModel();
             $groupsForEvent = $group ? array($group) : array();
 
 			$event->setCountry($this->siteContainer['site']->getDefaultCountry());
@@ -85,13 +85,13 @@ class DataLoaderIni extends  BaseDataLoader {
 			}
 
             foreach($defaults as $default) {
-                if (is_a($default,'openacalendar\staticweb\models\Group')) {
+                if (is_a($default, 'openacalendar\staticweb\models\GroupModel')) {
                     $groupsForEvent[] = $default;
-                } else if (is_a($default, 'openacalendar\staticweb\models\Country')) {
+                } else if (is_a($default, 'openacalendar\staticweb\models\CountryModel')) {
                     $event->setCountry($default);
-                } else if (is_a($default, 'openacalendar\staticweb\models\Area')) {
+                } else if (is_a($default, 'openacalendar\staticweb\models\AreaModel')) {
                     $event->setArea($default);
-                } else if (is_a($default, 'openacalendar\staticweb\models\DefaultTimeZone')) {
+                } else if (is_a($default, 'openacalendar\staticweb\models\DefaultTimeZoneModel')) {
                     $event->setTimeZone($default->getCode());
                 }
             }
@@ -139,7 +139,7 @@ class DataLoaderIni extends  BaseDataLoader {
                 }
 			}
 
-            if (is_a($event->getCountry(),'openacalendar\staticweb\models\Country') && $event->getTimeZone()) {
+            if (is_a($event->getCountry(), 'openacalendar\staticweb\models\CountryModel') && $event->getTimeZone()) {
                 if (!$event->getCountry()->hasTimeZone($event->getTimeZone())) {
                     $out->addError(new DataErrorInvalidTimeZoneForCountry());
                     return $out;
@@ -155,12 +155,12 @@ class DataLoaderIni extends  BaseDataLoader {
 		}
 
         if (isset($data['area']) && isset($data['area']['slug'])) {
-            $area = new Area();
+            $area = new AreaModel();
             $area->setSlug($data['area']['slug']);
             $area->setTitle(isset($data['area']['title']) ? $data['area']['title'] : $data['area']['slug']);
             $area->setCountry($this->siteContainer['site']->getDefaultCountry());
             foreach($defaults as $default) {
-                if (is_a($default, 'openacalendar\staticweb\models\Country')) {
+                if (is_a($default, 'openacalendar\staticweb\models\CountryModel')) {
                     $area->setCountry($default);
                 }
             }
@@ -183,7 +183,7 @@ class DataLoaderIni extends  BaseDataLoader {
             }
 
             if (isset($data['timezone']) && isset($data['timezone']['timezone'])) {
-                $timezone = new DefaultTimeZone($data['timezone']['timezone']);
+                $timezone = new DefaultTimeZoneModel($data['timezone']['timezone']);
                 // TODO check exisits!
                 if (!$timezone) {
                     $out->addError(new DataErrorInvalidTimeZone());

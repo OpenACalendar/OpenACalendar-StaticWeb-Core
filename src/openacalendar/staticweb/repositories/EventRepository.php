@@ -3,7 +3,7 @@
 namespace openacalendar\staticweb\repositories;
 
 
-use openacalendar\staticweb\models\Event;
+use openacalendar\staticweb\models\EventModel;
 
 /**
  *
@@ -21,13 +21,13 @@ class EventRepository extends BaseRepository
             " WHERE event_information.slug =:slug ");
         $stat->execute(array( 'slug'=> $slug));
         if ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $event = new Event();
+            $event = new EventModel();
             $event->setFromDataBaseRow($data);
             return $event;
         }
     }
 
-    public function create(Event $event) {
+    public function create(EventModel $event) {
         $stat = $this->siteContainer['databasehelper']->getPDO()->prepare("INSERT INTO event_information ".
             "(slug, summary, description, url, country_id, area_id, timezone, start_at,end_at )".
             " VALUES ".

@@ -3,8 +3,6 @@
 namespace openacalendar\staticweb\data;
 
 use openacalendar\staticweb\errors\BaseError;
-use openacalendar\staticweb\models\Event;
-use openacalendar\staticweb\models\Group;
 use openacalendar\staticweb\warnings\BaseWarning;
 
 /**

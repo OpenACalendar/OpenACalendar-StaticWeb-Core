@@ -2,7 +2,7 @@
 
 namespace openacalendar\staticweb\repositories\builders;
 
-use openacalendar\staticweb\models\Country;
+use openacalendar\staticweb\models\CountryModel;
 
 /**
  *
@@ -61,7 +61,7 @@ class CountryRepositoryBuilder extends BaseRepositoryBuilder
 
         $results = array();
         while ($data = $this->stat->fetch()) {
-            $event = new Country();
+            $event = new CountryModel();
             $event->setFromDataBaseRow($data);
             $results[] = $event;
         }

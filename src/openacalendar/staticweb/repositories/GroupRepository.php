@@ -3,8 +3,8 @@
 namespace openacalendar\staticweb\repositories;
 
 
-use openacalendar\staticweb\models\Group;
-use openacalendar\staticweb\models\Event;
+use openacalendar\staticweb\models\GroupModel;
+use openacalendar\staticweb\models\EventModel;
 
 /**
  *
@@ -29,13 +29,13 @@ class GroupRepository extends BaseRepository
             " WHERE group_information.slug =:slug ");
         $stat->execute(array( 'slug'=> $slug));
         if ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $group = new Group();
+            $group = new GroupModel();
             $group->setFromDataBaseRow($data);
             return $group;
         }
     }
 
-    public function create(Group $group) {
+    public function create(GroupModel $group) {
         $stat = $this->siteContainer['databasehelper']->getPDO()->prepare("INSERT INTO group_information ".
             "(slug, title, description, url )".
             " VALUES ".
@@ -49,7 +49,7 @@ class GroupRepository extends BaseRepository
         $group->setId($this->siteContainer['databasehelper']->getPDO()->lastInsertId());
     }
 
-    public function addEventToGroup(Event $event, Group $group) {
+    public function addEventToGroup(EventModel $event, GroupModel $group) {
 
         $stat = $this->siteContainer['databasehelper']->getPDO()->prepare("SELECT * FROM event_in_group WHERE group_id=:group_id AND ".
             " event_id=:event_id ");

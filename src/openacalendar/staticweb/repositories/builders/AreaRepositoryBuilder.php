@@ -2,8 +2,8 @@
 
 namespace openacalendar\staticweb\repositories\builders;
 
-use openacalendar\staticweb\models\Country;
-use openacalendar\staticweb\models\Area;
+use openacalendar\staticweb\models\CountryModel;
+use openacalendar\staticweb\models\AreaModel;
 
 /**
  *
@@ -21,7 +21,7 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder
 
     protected $country;
 
-    public function setCountry(Country $country)
+    public function setCountry(CountryModel $country)
     {
         $this->country = $country;
     }
@@ -64,7 +64,7 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder
 
         $results = array();
         while ($data = $this->stat->fetch()) {
-            $area = new Area();
+            $area = new AreaModel();
             $area->setFromDataBaseRow($data);
             $results[] = $area;
         }

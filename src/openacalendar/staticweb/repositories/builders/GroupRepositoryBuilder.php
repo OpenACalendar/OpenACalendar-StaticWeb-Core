@@ -2,8 +2,8 @@
 
 namespace openacalendar\staticweb\repositories\builders;
 
-use openacalendar\staticweb\models\Group;
-use openacalendar\staticweb\models\Event;
+use openacalendar\staticweb\models\GroupModel;
+use openacalendar\staticweb\models\EventModel;
 
 /**
  *
@@ -20,10 +20,10 @@ class GroupRepositoryBuilder extends BaseRepositoryBuilder
     protected $orderDirection = " ASC ";
 
 
-    /** @var Event **/
+    /** @var EventModel **/
     protected $event;
 
-    public function setEvent(Event $event) {
+    public function setEvent(EventModel $event) {
         $this->event = $event;
     }
 
@@ -61,7 +61,7 @@ class GroupRepositoryBuilder extends BaseRepositoryBuilder
 
         $results = array();
         while ($data = $this->stat->fetch()) {
-            $event = new Group();
+            $event = new GroupModel();
             $event->setFromDataBaseRow($data);
             $results[] = $event;
         }

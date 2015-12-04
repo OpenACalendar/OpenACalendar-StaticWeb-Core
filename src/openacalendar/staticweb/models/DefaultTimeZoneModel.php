@@ -12,7 +12,7 @@ use openacalendar\staticweb\config\Config;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class DefaultTimeZone
+class DefaultTimeZoneModel
 {
 
 

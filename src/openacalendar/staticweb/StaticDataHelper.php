@@ -4,7 +4,6 @@
 namespace openacalendar\staticweb;
 
 use openacalendar\staticweb\models\TimeZone;
-use openacalendar\staticweb\models\Country;
 
 
 /**

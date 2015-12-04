@@ -10,7 +10,7 @@ namespace openacalendar\staticweb\models;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class Group
+class GroupModel
 {
 
     protected $id;

@@ -12,7 +12,7 @@ use openacalendar\staticweb\config\Config;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class Event {
+class EventModel {
 
     protected $id;
 
@@ -28,12 +28,12 @@ class Event {
 
     protected $country_id;
 
-    /** @var  Country */
+    /** @var  CountryModel */
     protected $country;
 
     protected $area_id;
 
-    /** @var  Area */
+    /** @var  AreaModel */
     protected $area;
 
     protected $timeZone;
@@ -174,7 +174,7 @@ class Event {
     /**
      * @param mixed $country
      */
-    public function setCountry(Country $country)
+    public function setCountry(CountryModel $country)
     {
         $this->country_id = $country->getId();
         $this->country = $country;
@@ -199,7 +199,7 @@ class Event {
     /**
      * @param mixed $area
      */
-    public function setArea(Area $area)
+    public function setArea(AreaModel $area)
     {
         $this->area_id = $area->getId();
         $this->area = $area;

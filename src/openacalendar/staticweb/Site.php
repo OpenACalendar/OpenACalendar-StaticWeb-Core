@@ -16,7 +16,7 @@ use openacalendar\staticweb\errors\DataErrorTwoAreasHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
-use openacalendar\staticweb\models\Area;
+use openacalendar\staticweb\models\AreaModel;
 use openacalendar\staticweb\repositories\AreaRepository;
 use openacalendar\staticweb\repositories\CountryRepository;
 use openacalendar\staticweb\repositories\EventRepository;
@@ -25,8 +25,8 @@ use openacalendar\staticweb\themes\overthewall\OverTheWallTheme;
 use openacalendar\staticweb\warnings\DataWarningAreaHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningGroupHasNoSlug;
-use openacalendar\staticweb\models\Event;
-use openacalendar\staticweb\models\Group;
+use openacalendar\staticweb\models\EventModel;
+use openacalendar\staticweb\models\GroupModel;
 use Pimple\Container;
 
 /**
@@ -200,7 +200,7 @@ class Site {
 		}
 	}
 
-	public function addEvent(Event $event) {
+	public function addEvent(EventModel $event) {
 		if (!$event->getSlug()) {
 			$this->warnings[] = new DataWarningEventHasNoSlug();
 			$event->createSlug();
@@ -214,7 +214,7 @@ class Site {
 		$this->siteContainer['eventrepository']->create($event);
 	}
 
-	public function addGroup(Group $group) {
+	public function addGroup(GroupModel $group) {
 		if (!$group->getSlug()) {
 			$this->warnings[] = new DataWarningGroupHasNoSlug();
 			$group->createSlug();
@@ -225,7 +225,7 @@ class Site {
 		$this->siteContainer['grouprepository']->create($group);
 	}
 
-    public function addArea(Area $area) {
+    public function addArea(AreaModel $area) {
         if (!$area->getSlug()) {
             $this->warnings[] = new DataWarningAreaHasNoSlug();
             $area->createSlug();

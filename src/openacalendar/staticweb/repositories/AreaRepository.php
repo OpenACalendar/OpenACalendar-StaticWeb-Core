@@ -3,7 +3,7 @@
 namespace openacalendar\staticweb\repositories;
 
 
-use openacalendar\staticweb\models\Area;
+use openacalendar\staticweb\models\AreaModel;
 
 /**
  *
@@ -21,13 +21,13 @@ class AreaRepository extends BaseRepository
             " WHERE area_information.slug =:slug ");
         $stat->execute(array( 'slug'=> $slug));
         if ($data = $stat->fetch(\PDO::FETCH_ASSOC)) {
-            $area = new Area();
+            $area = new AreaModel();
             $area->setFromDataBaseRow($data);
             return $area;
         }
     }
 
-    public function create(Area $area) {
+    public function create(AreaModel $area) {
         $stat = $this->siteContainer['databasehelper']->getPDO()->prepare("INSERT INTO area_information ".
             "(slug, title, country_id, parent_area_id)".
             " VALUES ".

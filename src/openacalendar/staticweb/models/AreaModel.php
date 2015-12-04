@@ -10,7 +10,7 @@ namespace openacalendar\staticweb\models;
  * @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
  * @author James Baster <james@jarofgreen.co.uk>
  */
-class Area
+class AreaModel
 {
 
     protected $id;
@@ -95,7 +95,7 @@ class Area
     /**
      * @param mixed $country
      */
-    public function setCountry(Country $country)
+    public function setCountry(CountryModel $country)
     {
         $this->country_id = $country->getId();
     }
