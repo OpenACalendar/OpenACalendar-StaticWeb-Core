@@ -5,6 +5,7 @@ namespace openacalendar\staticweb\data;
 use openacalendar\staticweb\errors\DataErrorInvalidCountry;
 use openacalendar\staticweb\errors\DataErrorInvalidTimeZone;
 use openacalendar\staticweb\errors\DataErrorInvalidTimeZoneForCountry;
+use openacalendar\staticweb\models\Area;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
 use openacalendar\staticweb\models\DefaultTimeZone;
@@ -88,6 +89,8 @@ class DataLoaderIni extends  BaseDataLoader {
                     $groupsForEvent[] = $default;
                 } else if (is_a($default, 'openacalendar\staticweb\models\Country')) {
                     $event->setCountry($default);
+                } else if (is_a($default, 'openacalendar\staticweb\models\Area')) {
+                    $event->setArea($default);
                 } else if (is_a($default, 'openacalendar\staticweb\models\DefaultTimeZone')) {
                     $event->setTimeZone($default->getCode());
                 }
@@ -151,6 +154,22 @@ class DataLoaderIni extends  BaseDataLoader {
 
 		}
 
+        if (isset($data['area']) && isset($data['area']['slug'])) {
+            $area = new Area();
+            $area->setSlug($data['area']['slug']);
+            $area->setTitle(isset($data['area']['title']) ? $data['area']['title'] : $data['area']['slug']);
+            $area->setCountry($this->siteContainer['site']->getDefaultCountry());
+            foreach($defaults as $default) {
+                if (is_a($default, 'openacalendar\staticweb\models\Country')) {
+                    $area->setCountry($default);
+                }
+            }
+            // TODO also have to look for country in $out->defaults
+            $this->siteContainer['site']->addArea($area);
+            if ($isDefault) {
+                $out->addDefault($area);
+            }
+        }
 
         if ($isDefault) {
 

@@ -31,6 +31,11 @@ class Event {
     /** @var  Country */
     protected $country;
 
+    protected $area_id;
+
+    /** @var  Area */
+    protected $area;
+
     protected $timeZone;
 
     protected $description;
@@ -68,6 +73,7 @@ class Event {
         $this->timeZone = $data['timezone'];
         $this->url = $data['url'];
         $this->country_id = $data['country_id'];
+        $this->area_id = $data['area_id'];
     }
 
 
@@ -172,6 +178,31 @@ class Event {
     {
         $this->country_id = $country->getId();
         $this->country = $country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAreaId()
+    {
+        return $this->area_id;
+    }
+
+    /**
+     * @param mixed $area
+     */
+    public function setArea(Area $area)
+    {
+        $this->area_id = $area->getId();
+        $this->area = $area;
     }
 
     /**

@@ -29,15 +29,16 @@ class EventRepository extends BaseRepository
 
     public function create(Event $event) {
         $stat = $this->siteContainer['databasehelper']->getPDO()->prepare("INSERT INTO event_information ".
-            "(slug, summary, description, url, country_id, timezone, start_at,end_at )".
+            "(slug, summary, description, url, country_id, area_id, timezone, start_at,end_at )".
             " VALUES ".
-            "(:slug, :summary,  :description, :url, :country_id, :timezone, :start_at, :end_at)");
+            "(:slug, :summary,  :description, :url, :country_id, :area_id,  :timezone, :start_at, :end_at)");
         $stat->execute(array(
             'slug'=>$event->getSlug(),
             'summary'=>$event->getTitle(),
             'description'=>$event->getDescription(),
             'url'=>$event->getUrl(),
             'country_id'=>$event->getCountryId(),
+            'area_id'=>$event->getAreaId(),
             'timezone'=>$event->getTimezone(),
             'start_at'=>$event->getStart()->getTimestamp(),
             'end_at'=>$event->getEnd()->getTimestamp(),

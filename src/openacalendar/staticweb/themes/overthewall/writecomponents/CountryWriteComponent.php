@@ -3,6 +3,7 @@
 namespace openacalendar\staticweb\themes\overthewall\writecomponents;
 
 
+use openacalendar\staticweb\repositories\builders\AreaRepositoryBuilder;
 use openacalendar\staticweb\repositories\builders\CountryRepositoryBuilder;
 use openacalendar\staticweb\repositories\builders\EventRepositoryBuilder;
 use openacalendar\staticweb\writecomponents\BaseWriteTwigComponent;
@@ -40,9 +41,13 @@ class CountryWriteComponent extends BaseWriteTwigComponent {
             $erb->setCountry($country);
             $erb->setAfterNow();
 
+            $arb = new AreaRepositoryBuilder($this->siteContainer);
+            $arb->setCountry($country);
+
             $this->outFolder->addFileContents('country'.DIRECTORY_SEPARATOR.strtoupper($country->getTwoCharCode()),'index.html',$this->twigHelper->getTwig()->render('country/index.html.twig', array_merge($this->baseViewParameters, array(
                 'country'=>$country,
                 'events'=>$erb->fetchAll(),
+                'areas'=>$arb->fetchAll(),
             ))));
         }
 

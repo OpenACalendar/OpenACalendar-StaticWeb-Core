@@ -6,20 +6,13 @@
  # @author James Baster <james@jarofgreen.co.uk>
  #}
 
-{% extends 'country/page.html.twig' %}
+{% extends 'area/page.html.twig' %}
 
 {% block tabDetails %}currentTab{% endblock %}
 
 {% block innerContent %}
 
 
-	{%  if areas %}
-		<ul class="">
-			{% for area in areas %}
-				<li><a href="{{ ("/area/" ~ area.slug) | internalLinkToDir }}">{{  area.title }}</a></li>
-			{% endfor %}
-		</ul>
-	{%  endif %}
 
 	<ul class="mainListEvents">
 		{% for event in events %}
@@ -30,5 +23,6 @@
 			</li>
 		{% endfor %}
 	</ul>
+
 
 {% endblock %}

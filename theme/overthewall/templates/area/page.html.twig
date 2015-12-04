@@ -1,0 +1,29 @@
+{#
+ # @package Core
+ # @link http://ican.openacalendar.org/ OpenACalendar Open Source Software - Website
+ # @license http://ican.openacalendar.org/license.html 3-clause BSD
+ # @copyright (c) 2015, JMB Technology Limited, http://jmbtechnology.co.uk/
+ # @author James Baster <james@jarofgreen.co.uk>
+ #}
+
+{% extends 'page.html.twig' %}
+
+{% block content %}
+
+	<h2>{{  country.title }} : {{  area.title }}</h2>
+
+	<div id="innerPageWrapper">
+		<ul id="innerPageActions">
+			<li class="tab {% block tabDetails %}{% endblock %}"><a href="{{ ("/area/" ~ area.title) | internalLinkToDir }}">Details</a></li>
+			{% block actions %}{% endblock %}
+		</ul>
+		<div id="innerPage">
+
+			{% block innerContent %}{% endblock %}
+
+			<div id="afterInnerPageContent"></div>
+		</div>
+	</div>
+
+
+{% endblock %}

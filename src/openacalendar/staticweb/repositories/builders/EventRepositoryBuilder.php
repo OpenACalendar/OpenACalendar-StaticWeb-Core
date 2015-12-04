@@ -2,6 +2,7 @@
 
 namespace openacalendar\staticweb\repositories\builders;
 
+use openacalendar\staticweb\models\Area;
 use openacalendar\staticweb\models\Country;
 use openacalendar\staticweb\models\Event;
 use openacalendar\staticweb\models\Group;
@@ -20,11 +21,20 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder
     protected $orderBy = " start_at ";
     protected $orderDirection = " ASC ";
 
+    /** @var Country */
     protected $country;
 
     public function setCountry(Country $country)
     {
         $this->country = $country;
+    }
+
+    /** @var  Area */
+    protected $area;
+
+    public function setArea(Area $area)
+    {
+        $this->area = $area;
     }
 
     protected $group;
@@ -58,6 +68,11 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder
         if ($this->country) {
             $this->where[] = " event_information.country_id = :country_id ";
             $this->params['country_id'] = $this->country->getId();
+        }
+
+        if ($this->area) {
+            $this->where[] = " event_information.area_id = :area_id ";
+            $this->params['area_id'] = $this->area->getId();
         }
 
         if ($this->group) {

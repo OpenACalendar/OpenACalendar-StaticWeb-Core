@@ -12,13 +12,17 @@ use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZone;
 use openacalendar\staticweb\errors\ConfigErrorInvalidDefaultTimeZoneForDefaultCountry;
 use openacalendar\staticweb\errors\ConfigErrorInvalidTheme;
 use openacalendar\staticweb\errors\ConfigErrorNotFound;
+use openacalendar\staticweb\errors\DataErrorTwoAreasHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoEventsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorTwoGroupsHaveSameSlugs;
 use openacalendar\staticweb\errors\DataErrorEndBeforeStart;
+use openacalendar\staticweb\models\Area;
+use openacalendar\staticweb\repositories\AreaRepository;
 use openacalendar\staticweb\repositories\CountryRepository;
 use openacalendar\staticweb\repositories\EventRepository;
 use openacalendar\staticweb\repositories\GroupRepository;
 use openacalendar\staticweb\themes\overthewall\OverTheWallTheme;
+use openacalendar\staticweb\warnings\DataWarningAreaHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\Event;
@@ -85,7 +89,7 @@ class Site {
         $this->siteContainer['eventrepository'] = new EventRepository($this->siteContainer);
         $this->siteContainer['grouprepository'] = new GroupRepository($this->siteContainer);
         $this->siteContainer['countryrepository'] = new CountryRepository($this->siteContainer);
-
+        $this->siteContainer['arearepository'] = new AreaRepository($this->siteContainer);
 
 		$this->defaultCountry = $this->siteContainer['countryrepository']->loadByHumanInput($this->config->defaultCountry);
 		if (!$this->defaultCountry) {
@@ -220,6 +224,17 @@ class Site {
         }
 		$this->siteContainer['grouprepository']->create($group);
 	}
+
+    public function addArea(Area $area) {
+        if (!$area->getSlug()) {
+            $this->warnings[] = new DataWarningAreaHasNoSlug();
+            $area->createSlug();
+        }
+        if ($this->siteContainer['arearepository']->loadBySlug($area->getSlug())) {
+            $this->errors[] = new DataErrorTwoAreasHaveSameSlugs();
+        }
+        $this->siteContainer['arearepository']->create($area);
+    }
 
 
 	function write($outDir) {
