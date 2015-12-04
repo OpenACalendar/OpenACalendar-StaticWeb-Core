@@ -43,7 +43,7 @@ class TwigHelper
 		$this->twig->addExtension(new InternalLinkHelper($site->getConfig()));
         $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkifyExtension());
         $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\SameDayExtension());
-        $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LocalTimeExtension());
+        $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\TimeZoneExtension());
         $this->twig->addExtension(new \JMBTechnologyLimited\Twig\Extensions\LinkInfoExtension());
         $this->twig->addExtension(new TruncateExtension());
 	}

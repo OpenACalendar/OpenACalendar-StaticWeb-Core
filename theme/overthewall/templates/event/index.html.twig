@@ -33,14 +33,14 @@
 				</div>
 			{% else %}
 				<div class="dateTimeIcon">
-					<time datetime="{{ event.getStartAt|tolocaltimeformatted('c', event.timeZone) }}">
+					<time datetime="{{ event.getStartAt|totimezone(event.timeZone)|date('c') }}">
 						<div class="dateIcon">
-							<span class="startDay">{{ event.getStartAt|tolocaltimeformatted('D', event.timeZone) }}</span>
-							<span class="startDate">{{ event.getStartAt|tolocaltimeformatted('jS', event.timeZone) }}</span>
-							<span class="startMonthYear">{{ event.getStartAt|tolocaltimeformatted('M \'y', event.timeZone) }}</span>
+							<span class="startDay">{{ event.getStartAt|totimezone(event.timeZone)|date('D') }}</span>
+							<span class="startDate">{{ event.getStartAt|totimezone(event.timeZone)|date('jS') }}</span>
+							<span class="startMonthYear">{{ event.getStartAt|totimezone(event.timeZone)|date('M \'y') }}</span>
 						</div>
 						<div class="timeIcon">
-							<span class="startTime">{{ event.getStartAt|tolocaltimeformatted('g:ia', event.timeZone) }}</span>
+							<span class="startTime">{{ event.getStartAt|totimezone(event.timeZone)|date('g:ia') }}</span>
 						</div>
 					</time>
 				</div>

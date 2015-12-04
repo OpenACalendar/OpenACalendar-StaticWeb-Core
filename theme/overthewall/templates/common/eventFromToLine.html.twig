@@ -7,24 +7,24 @@
  #}
 
 <div class="date">
-	<time datetime="{{ startAt|tolocaltimeformatted('c', timezone) }}" itemprop="startDate">
-		<span class="startDay">{{ startAt|tolocaltimeformatted('D jS', timezone) }}</span>
-		<span class="startMonthYear">{{ startAt|tolocaltimeformatted('M Y', timezone) }}</span>
+	<time datetime="{{ startAt|totimezone(timezone)|date('c') }}" itemprop="startDate">
+		<span class="startDay">{{ startAt|totimezone(timezone)|date('D jS') }}</span>
+		<span class="startMonthYear">{{ startAt|totimezone(timezone)|date('M Y') }}</span>
 		<span class="startTime">
-			{{ startAt|tolocaltimeformatted('g:ia', timezone) }}
+			{{ startAt|totimezone(timezone)|date('g:ia') }}
 		</span>
 	</time>
 	<span class="to">to</span>
 	{% if sameday(startAt,endAt) %}
-		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}" itemprop="endDate">
+		<time datetime="{{ endAt|totimezone(timezone)|date('c', timezone) }}" itemprop="endDate">
 			<span class="end">
-				{{ endAt|tolocaltimeformatted('g:ia', timezone) }}
+				{{ endAt|totimezone(timezone)|date('g:ia') }}
 			</span>
 		</time>
 	{% else %}
-		<time datetime="{{ endAt|tolocaltimeformatted('c', timezone) }}" itemprop="endDate">
+		<time datetime="{{ endAt|totimezone(timezone)|date('c', timezone) }}" itemprop="endDate">
 			<span class="end">
-				{{ endAt|tolocaltimeformatted('D jS M Y g:ia', timezone) }}
+				{{ endAt|totimezone(timezone)|date('D jS M Y g:ia') }}
 			</span>
 		</time>
 	{% endif %}
