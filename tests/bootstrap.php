@@ -27,3 +27,4 @@ $app = new Container();
 $app['timesource'] = new \openacalendar\staticweb\TimeSource();
 $app['lesscss'] = new lessc();
 $app['log'] = new Monolog\Logger('app');
+$app['log']->pushHandler(new Monolog\Handler\NullHandler());
