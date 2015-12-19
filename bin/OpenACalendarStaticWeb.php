@@ -21,7 +21,7 @@ if (isset($opts['help'])) {
 	die();
 }
 
-$log = strtolower(trim($opts['log']));
+$log = isset($opts['log']) ? strtolower(trim($opts['log'])) : 'default';
 if ($log == 'none') {
     $app['log']->pushHandler(new Monolog\Handler\NullHandler());
 } else if ($log == 'debug') {
