@@ -17,9 +17,9 @@ class TemporaryFolder
 
   public function get() {
     if (!$this->folder) {
-      $this->folder = '/tmp/openacalendarstaticweb'.rand();
+      $this->folder = sys_get_temp_dir() . '/openacalendarstaticweb'.rand();
       while(file_exists($this->folder)) {
-        $this->folder = '/tmp/openacalendarstaticweb'.rand();
+        $this->folder = sys_get_temp_dir() . '/openacalendarstaticweb'.rand();
       }
       mkdir($this->folder);
     }
