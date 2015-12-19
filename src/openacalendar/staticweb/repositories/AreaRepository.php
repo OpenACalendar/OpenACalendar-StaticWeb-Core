@@ -41,4 +41,36 @@ class AreaRepository extends BaseRepository
         $area->setId($this->siteContainer['databasehelper']->getPDO()->lastInsertId());
     }
 
+    /**
+     *
+     *
+     */
+    public function buildCacheAreaHasParent(AreaModel $area) {
+        $statFirstArea = $this->siteContainer['databasehelper']->getPDO()->prepare("SELECT area_information.parent_area_id FROM area_information WHERE area_information.id=:id");
+        // get first parent
+        $areaParentID = null;
+        $statFirstArea->execute(array('id'=>$area->getId()));
+        $d = $statFirstArea->fetch();
+        if ($d) {
+            $areaParentID = $d['parent_area_id'];
+        }
+
+        $statInsertCache = $this->siteContainer['databasehelper']->getPDO()->prepare("INSERT INTO cached_area_has_parent(area_id,has_parent_area_id) VALUES (:area_id,:has_parent_area_id)");
+        $statNextArea = $this->siteContainer['databasehelper']->getPDO()->prepare("SELECT area_information.parent_area_id FROM area_information WHERE area_information.id=:id");
+        while($areaParentID) {
+            // insert this parent into the cache
+            $statInsertCache->execute(array('area_id'=>$area->getId(), 'has_parent_area_id'=>$areaParentID));
+
+            // move up to next parent
+            $statNextArea->execute(array('id'=>$areaParentID));
+            $d = $statNextArea->fetch();
+            if ($d) {
+                $areaParentID = $d['parent_area_id'];
+            } else {
+                $areaParentID = null;
+            }
+        }
+
+    }
+
 }

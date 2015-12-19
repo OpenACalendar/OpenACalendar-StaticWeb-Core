@@ -71,8 +71,23 @@ class EventRepositoryBuilder extends BaseRepositoryBuilder
         }
 
         if ($this->area) {
-            $this->where[] = " event_information.area_id = :area_id ";
-            $this->params['area_id'] = $this->area->getId();
+
+
+            // We were doing
+            // $this->joins[] = " LEFT JOIN cached_area_has_parent ON cached_area_has_parent.area_id = venue_information.area_id";
+            // $this->where[] =  " (venue_information.area_id = :area_id OR  cached_area_has_parent.has_parent_area_id = :area_id )";
+            // but then we got duplicates
+
+            $areaids = array( $this->area->getId() );
+
+            $this->statAreas = $this->siteContainer['databasehelper']->getPDO()->prepare("SELECT area_id FROM cached_area_has_parent WHERE has_parent_area_id=:id");
+            $this->statAreas->execute(array('id'=>$this->area->getId()));
+            while($d = $this->statAreas->fetch()) {
+                $areaids[] = $d['area_id'];
+            }
+
+            $this->where[] =  "  event_information.area_id IN (".  implode(",", $areaids).")";
+
         }
 
         if ($this->group) {

@@ -27,6 +27,7 @@ use openacalendar\staticweb\warnings\DataWarningEventHasNoSlug;
 use openacalendar\staticweb\warnings\DataWarningGroupHasNoSlug;
 use openacalendar\staticweb\models\EventModel;
 use openacalendar\staticweb\models\GroupModel;
+use openacalendar\staticweb\tasks\UpdateAreaParentCacheTask;
 use Pimple\Container;
 
 /**
@@ -158,6 +159,14 @@ class Site {
 		$this->loadDir();
 
 		$this->isLoaded = true;
+
+        $this->siteContainer['log']->notice("Running tasks after loading");
+
+        foreach(array(
+                new UpdateAreaParentCacheTask($this->siteContainer),
+                ) as $task) {
+            $task->run();
+        }
 
         $this->siteContainer['log']->notice("Finished loading");
 

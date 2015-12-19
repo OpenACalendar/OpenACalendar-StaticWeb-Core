@@ -1,6 +1,7 @@
 DROP TABLE IF EXISTS event_in_group;
 DROP TABLE IF EXISTS group_information;
 DROP TABLE IF EXISTS event_information;
+DROP TABLE IF EXISTS cached_area_has_parent;
 DROP TABLE IF EXISTS area_information;
 DROP TABLE IF EXISTS country;
 
@@ -17,6 +18,12 @@ CREATE TABLE area_information (
 	title VARCHAR(255),
 	country_id INTEGER NOT NULL,
 	parent_area_id INTEGER NULL
+);
+
+CREATE TABLE cached_area_has_parent (
+  area_id INTEGER NOT NULL,
+  has_parent_area_id INTEGER NOT NULL,
+  PRIMARY KEY(area_id, has_parent_area_id)
 );
 
 CREATE TABLE event_information (
