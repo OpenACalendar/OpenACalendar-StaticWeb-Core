@@ -26,7 +26,18 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder
         $this->country = $country;
     }
 
-    
+    /** @var AreaModel **/
+    protected $parentArea;
+
+    public function setParentArea(AreaModel $area) {
+        $this->parentArea = $area;
+    }
+
+    protected $noParentArea = false;
+
+    public function setNoParentArea($noParentArea) {
+        $this->noParentArea = $noParentArea;
+    }
 
 
     protected function build()
@@ -39,6 +50,12 @@ class AreaRepositoryBuilder extends BaseRepositoryBuilder
             $this->params['country_id'] = $this->country->getId();
         }
 
+        if ($this->noParentArea) {
+            $this->where[] = ' area_information.parent_area_id IS null ';
+        } else if ($this->parentArea) {
+            $this->where[] =  " area_information.parent_area_id = :parent_id ";
+            $this->params['parent_id'] = $this->parentArea->getId();
+        }
 
     }
 

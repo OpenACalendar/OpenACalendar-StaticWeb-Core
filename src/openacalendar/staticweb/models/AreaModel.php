@@ -116,6 +116,13 @@ class AreaModel
         $this->parent_area_id = $parent_area_id;
     }
 
+    /**
+     */
+    public function setParentArea(AreaModel $parent_area)
+    {
+        $this->parent_area_id = $parent_area->getId();
+    }
+
 
     public function getDataForLoggerInfo() {
         return array(

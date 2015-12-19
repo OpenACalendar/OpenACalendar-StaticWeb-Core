@@ -35,9 +35,13 @@ class AreaWriteComponent extends BaseWriteTwigComponent {
             $erb->setArea($area);
             $erb->setAfterNow();
 
+            $arb = new AreaRepositoryBuilder($this->siteContainer);
+            $arb->setParentArea($area);
+
             $this->outFolder->addFileContents('area'.DIRECTORY_SEPARATOR.$area->getSlug(),'index.html',$this->twigHelper->getTwig()->render('area/index.html.twig', array_merge($this->baseViewParameters, array(
                 'country'=>$this->siteContainer['countryrepository']->loadById($area->getCountryId()),
                 'area'=>$area,
+                'areas'=>$arb->fetchAll(),
                 'events'=>$erb->fetchAll(),
             ))));
         }

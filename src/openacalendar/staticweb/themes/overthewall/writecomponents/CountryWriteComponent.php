@@ -43,6 +43,7 @@ class CountryWriteComponent extends BaseWriteTwigComponent {
 
             $arb = new AreaRepositoryBuilder($this->siteContainer);
             $arb->setCountry($country);
+            $arb->setNoParentArea(true);
 
             $this->outFolder->addFileContents('country'.DIRECTORY_SEPARATOR.strtoupper($country->getTwoCharCode()),'index.html',$this->twigHelper->getTwig()->render('country/index.html.twig', array_merge($this->baseViewParameters, array(
                 'country'=>$country,

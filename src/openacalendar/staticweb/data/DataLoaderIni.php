@@ -164,6 +164,8 @@ class DataLoaderIni extends  BaseDataLoader {
             foreach($defaults as $default) {
                 if (is_a($default, 'openacalendar\staticweb\models\CountryModel')) {
                     $area->setCountry($default);
+                } else if (is_a($default, 'openacalendar\staticweb\models\AreaModel')) {
+                    $area->setParentArea($default);
                 }
             }
             // TODO also have to look for country in $out->defaults
